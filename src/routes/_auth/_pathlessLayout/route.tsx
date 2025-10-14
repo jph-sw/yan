@@ -35,8 +35,7 @@ function RouteComponent() {
         user={user!}
         documents={documents}
       />
-      <main>
-        <SidebarTrigger />
+      <main className="flex h-full flex-1 flex-col">
         <Outlet />
       </main>
     </SidebarProvider>

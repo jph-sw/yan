@@ -1,8 +1,8 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
-import { desc } from "drizzle-orm";
-import { collection } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
+import { collection, document } from "@/db/schema";
 import z from "zod";
 import { d } from "node_modules/drizzle-kit/index-BAUrj6Ib.mjs";
 
@@ -40,4 +40,61 @@ export const createCollection = createServerFn({
       .values({ id: crypto.randomUUID(), name: data.name })
       .returning();
     return newCollection[0];
+  });
+
+export const getCollectionById = createServerFn({
+  method: "GET",
+})
+  .inputValidator(
+    z.object({
+      collectionId: z.string().min(1),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const collections = await db
+      .select()
+      .from(collection)
+      .where(eq(collection.id, data.collectionId));
+    return collections[0] || null;
+  });
+
+export const getCollectionByDocId = createServerFn({ method: "GET" })
+  .inputValidator(z.object({ documentId: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    const docs = await db
+      .select()
+      .from(document)
+      .where(eq(document.id, data.documentId))
+      .limit(1);
+    const doc = docs[0];
+
+    const collection = await getCollectionById({
+      data: { collectionId: doc.collectionId },
+    });
+
+    return collection;
+  });
+
+export const getCollectionByIdQuery = (id: string) =>
+  queryOptions({
+    queryKey: ["collection", id],
+    queryFn: async ({ queryKey }) => {
+      const collectionId = queryKey[1] as string;
+      const collection = await getCollectionById({ data: { collectionId } });
+      return collection;
+    },
+    enabled: !!id,
+  });
+
+export const getCollectionByDocIdQuery = (documentId: string) =>
+  queryOptions({
+    queryKey: ["collectionByDoc", documentId],
+    queryFn: async ({ queryKey }) => {
+      const docId = queryKey[1] as string;
+      const collection = await getCollectionByDocId({
+        data: { documentId: docId },
+      });
+      return collection;
+    },
+    enabled: !!documentId,
   });
