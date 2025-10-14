@@ -12,13 +12,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "file:local.db"
+      DATABASE_URL: "file:/app/data/local.db" 
       BETTER_AUTH_SECRET: "blbabla"
       BETTER_AUTH_URL: "http://localhost:3000"
       WS_URL: "http://yan-ws:1234/collaboration"
     volumes:
       - yan-data:/app/data
     restart: unless-stopped
+    
   yan-ws:
     image: "jphsw/yan-ws:latest"
     container_name: yan-ws
@@ -29,6 +30,7 @@ services:
     depends_on:
       - yan
     restart: unless-stopped
+    
 volumes:
   yan-data:
 ```
