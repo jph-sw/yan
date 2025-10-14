@@ -7,9 +7,9 @@
     "dev": "vite dev",
     "build": "vite build && tsc --noEmit",
     "start": "vite start",
-    "ws": "npx @hocuspocus/cli --port 1234 --sqlite",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "build:server": "bun build server.ts --outfile dist/server.js --target=bun --format=cjs --minify"
   },
   "dependencies": {
     "@harshtalks/slash-tiptap": "^1.3.0",
