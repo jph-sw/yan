@@ -13,14 +13,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PathlessLayoutRouteImport } from './routes/_pathlessLayout'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiUsersRouteImport } from './routes/api/users'
-import { Route as PathlessLayoutNestedLayoutRouteImport } from './routes/_pathlessLayout/_nested-layout'
 import { Route as AuthPathlessLayoutRouteRouteImport } from './routes/_auth/_pathlessLayout/route'
-import { Route as ApiUsersIdRouteImport } from './routes/api/users.$id'
+import { Route as ApiGetDocumentIdRouteImport } from './routes/api/get-document.$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as PathlessLayoutNestedLayoutRouteBRouteImport } from './routes/_pathlessLayout/_nested-layout/route-b'
-import { Route as PathlessLayoutNestedLayoutRouteARouteImport } from './routes/_pathlessLayout/_nested-layout/route-a'
 import { Route as AuthPathlessLayoutHomeRouteImport } from './routes/_auth/_pathlessLayout/home'
+import { Route as ApiSetDocumentIdContentRouteImport } from './routes/api/set-document.$id.$content'
 import { Route as AuthPathlessLayoutDocIdRouteImport } from './routes/_auth/_pathlessLayout/doc.$id'
 import { Route as AuthPathlessLayoutCollectionIdRouteImport } from './routes/_auth/_pathlessLayout/collection.$id'
 
@@ -42,46 +39,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiUsersRoute = ApiUsersRouteImport.update({
-  id: '/api/users',
-  path: '/api/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PathlessLayoutNestedLayoutRoute =
-  PathlessLayoutNestedLayoutRouteImport.update({
-    id: '/_nested-layout',
-    getParentRoute: () => PathlessLayoutRoute,
-  } as any)
 const AuthPathlessLayoutRouteRoute = AuthPathlessLayoutRouteRouteImport.update({
   id: '/_pathlessLayout',
   getParentRoute: () => AuthRoute,
 } as any)
-const ApiUsersIdRoute = ApiUsersIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiUsersRoute,
+const ApiGetDocumentIdRoute = ApiGetDocumentIdRouteImport.update({
+  id: '/api/get-document/$id',
+  path: '/api/get-document/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PathlessLayoutNestedLayoutRouteBRoute =
-  PathlessLayoutNestedLayoutRouteBRouteImport.update({
-    id: '/route-b',
-    path: '/route-b',
-    getParentRoute: () => PathlessLayoutNestedLayoutRoute,
-  } as any)
-const PathlessLayoutNestedLayoutRouteARoute =
-  PathlessLayoutNestedLayoutRouteARouteImport.update({
-    id: '/route-a',
-    path: '/route-a',
-    getParentRoute: () => PathlessLayoutNestedLayoutRoute,
-  } as any)
 const AuthPathlessLayoutHomeRoute = AuthPathlessLayoutHomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => AuthPathlessLayoutRouteRoute,
+} as any)
+const ApiSetDocumentIdContentRoute = ApiSetDocumentIdContentRouteImport.update({
+  id: '/api/set-document/$id/$content',
+  path: '/api/set-document/$id/$content',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthPathlessLayoutDocIdRoute = AuthPathlessLayoutDocIdRouteImport.update({
   id: '/doc/$id',
@@ -98,69 +78,58 @@ const AuthPathlessLayoutCollectionIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/api/users': typeof ApiUsersRouteWithChildren
   '/home': typeof AuthPathlessLayoutHomeRoute
-  '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/users/$id': typeof ApiUsersIdRoute
+  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/api/set-document/$id/$content': typeof ApiSetDocumentIdContentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/api/users': typeof ApiUsersRouteWithChildren
   '/home': typeof AuthPathlessLayoutHomeRoute
-  '/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/users/$id': typeof ApiUsersIdRoute
+  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/api/set-document/$id/$content': typeof ApiSetDocumentIdContentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
-  '/_pathlessLayout': typeof PathlessLayoutRouteWithChildren
+  '/_pathlessLayout': typeof PathlessLayoutRoute
   '/login': typeof LoginRoute
   '/_auth/_pathlessLayout': typeof AuthPathlessLayoutRouteRouteWithChildren
-  '/_pathlessLayout/_nested-layout': typeof PathlessLayoutNestedLayoutRouteWithChildren
-  '/api/users': typeof ApiUsersRouteWithChildren
   '/_auth/_pathlessLayout/home': typeof AuthPathlessLayoutHomeRoute
-  '/_pathlessLayout/_nested-layout/route-a': typeof PathlessLayoutNestedLayoutRouteARoute
-  '/_pathlessLayout/_nested-layout/route-b': typeof PathlessLayoutNestedLayoutRouteBRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/users/$id': typeof ApiUsersIdRoute
+  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/_auth/_pathlessLayout/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/_auth/_pathlessLayout/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/api/set-document/$id/$content': typeof ApiSetDocumentIdContentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
-    | '/api/users'
     | '/home'
-    | '/route-a'
-    | '/route-b'
     | '/api/auth/$'
-    | '/api/users/$id'
+    | '/api/get-document/$id'
     | '/collection/$id'
     | '/doc/$id'
+    | '/api/set-document/$id/$content'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/api/users'
     | '/home'
-    | '/route-a'
-    | '/route-b'
     | '/api/auth/$'
-    | '/api/users/$id'
+    | '/api/get-document/$id'
     | '/collection/$id'
     | '/doc/$id'
+    | '/api/set-document/$id/$content'
   id:
     | '__root__'
     | '/'
@@ -168,24 +137,22 @@ export interface FileRouteTypes {
     | '/_pathlessLayout'
     | '/login'
     | '/_auth/_pathlessLayout'
-    | '/_pathlessLayout/_nested-layout'
-    | '/api/users'
     | '/_auth/_pathlessLayout/home'
-    | '/_pathlessLayout/_nested-layout/route-a'
-    | '/_pathlessLayout/_nested-layout/route-b'
     | '/api/auth/$'
-    | '/api/users/$id'
+    | '/api/get-document/$id'
     | '/_auth/_pathlessLayout/collection/$id'
     | '/_auth/_pathlessLayout/doc/$id'
+    | '/api/set-document/$id/$content'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
-  PathlessLayoutRoute: typeof PathlessLayoutRouteWithChildren
+  PathlessLayoutRoute: typeof PathlessLayoutRoute
   LoginRoute: typeof LoginRoute
-  ApiUsersRoute: typeof ApiUsersRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiGetDocumentIdRoute: typeof ApiGetDocumentIdRoute
+  ApiSetDocumentIdContentRoute: typeof ApiSetDocumentIdContentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -218,20 +185,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/users': {
-      id: '/api/users'
-      path: '/api/users'
-      fullPath: '/api/users'
-      preLoaderRoute: typeof ApiUsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_pathlessLayout/_nested-layout': {
-      id: '/_pathlessLayout/_nested-layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteImport
-      parentRoute: typeof PathlessLayoutRoute
-    }
     '/_auth/_pathlessLayout': {
       id: '/_auth/_pathlessLayout'
       path: ''
@@ -239,12 +192,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthPathlessLayoutRouteRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/api/users/$id': {
-      id: '/api/users/$id'
-      path: '/$id'
-      fullPath: '/api/users/$id'
-      preLoaderRoute: typeof ApiUsersIdRouteImport
-      parentRoute: typeof ApiUsersRoute
+    '/api/get-document/$id': {
+      id: '/api/get-document/$id'
+      path: '/api/get-document/$id'
+      fullPath: '/api/get-document/$id'
+      preLoaderRoute: typeof ApiGetDocumentIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -253,26 +206,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_pathlessLayout/_nested-layout/route-b': {
-      id: '/_pathlessLayout/_nested-layout/route-b'
-      path: '/route-b'
-      fullPath: '/route-b'
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteBRouteImport
-      parentRoute: typeof PathlessLayoutNestedLayoutRoute
-    }
-    '/_pathlessLayout/_nested-layout/route-a': {
-      id: '/_pathlessLayout/_nested-layout/route-a'
-      path: '/route-a'
-      fullPath: '/route-a'
-      preLoaderRoute: typeof PathlessLayoutNestedLayoutRouteARouteImport
-      parentRoute: typeof PathlessLayoutNestedLayoutRoute
-    }
     '/_auth/_pathlessLayout/home': {
       id: '/_auth/_pathlessLayout/home'
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthPathlessLayoutHomeRouteImport
       parentRoute: typeof AuthPathlessLayoutRouteRoute
+    }
+    '/api/set-document/$id/$content': {
+      id: '/api/set-document/$id/$content'
+      path: '/api/set-document/$id/$content'
+      fullPath: '/api/set-document/$id/$content'
+      preLoaderRoute: typeof ApiSetDocumentIdContentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/_pathlessLayout/doc/$id': {
       id: '/_auth/_pathlessLayout/doc/$id'
@@ -319,55 +265,14 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface PathlessLayoutNestedLayoutRouteChildren {
-  PathlessLayoutNestedLayoutRouteARoute: typeof PathlessLayoutNestedLayoutRouteARoute
-  PathlessLayoutNestedLayoutRouteBRoute: typeof PathlessLayoutNestedLayoutRouteBRoute
-}
-
-const PathlessLayoutNestedLayoutRouteChildren: PathlessLayoutNestedLayoutRouteChildren =
-  {
-    PathlessLayoutNestedLayoutRouteARoute:
-      PathlessLayoutNestedLayoutRouteARoute,
-    PathlessLayoutNestedLayoutRouteBRoute:
-      PathlessLayoutNestedLayoutRouteBRoute,
-  }
-
-const PathlessLayoutNestedLayoutRouteWithChildren =
-  PathlessLayoutNestedLayoutRoute._addFileChildren(
-    PathlessLayoutNestedLayoutRouteChildren,
-  )
-
-interface PathlessLayoutRouteChildren {
-  PathlessLayoutNestedLayoutRoute: typeof PathlessLayoutNestedLayoutRouteWithChildren
-}
-
-const PathlessLayoutRouteChildren: PathlessLayoutRouteChildren = {
-  PathlessLayoutNestedLayoutRoute: PathlessLayoutNestedLayoutRouteWithChildren,
-}
-
-const PathlessLayoutRouteWithChildren = PathlessLayoutRoute._addFileChildren(
-  PathlessLayoutRouteChildren,
-)
-
-interface ApiUsersRouteChildren {
-  ApiUsersIdRoute: typeof ApiUsersIdRoute
-}
-
-const ApiUsersRouteChildren: ApiUsersRouteChildren = {
-  ApiUsersIdRoute: ApiUsersIdRoute,
-}
-
-const ApiUsersRouteWithChildren = ApiUsersRoute._addFileChildren(
-  ApiUsersRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
-  PathlessLayoutRoute: PathlessLayoutRouteWithChildren,
+  PathlessLayoutRoute: PathlessLayoutRoute,
   LoginRoute: LoginRoute,
-  ApiUsersRoute: ApiUsersRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiGetDocumentIdRoute: ApiGetDocumentIdRoute,
+  ApiSetDocumentIdContentRoute: ApiSetDocumentIdContentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

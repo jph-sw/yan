@@ -1,9 +1,6 @@
 import express from "express";
 import expressWebsockets from "express-ws";
 import { Hocuspocus } from "@hocuspocus/server";
-import { db } from "@/utils/db";
-import { document } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { Database } from "@hocuspocus/extension-database";
 
 // Configure Hocuspocus
@@ -12,21 +9,22 @@ const hocuspocus = new Hocuspocus({
   extensions: [
     new Database({
       fetch: async ({ documentName }) => {
-        const res = await db
-          .select()
-          .from(document)
-          .where(eq(document.id, documentName));
-        return new Promise((resolve, reject) => {
-          if (res.length > 0) {
-            resolve(res[0].content as any);
-          }
+        const res = await fetch(
+          `http://localhost:3000/api/get-document/${documentName}`,
+        );
+        const data = await res.json();
+
+        return new Promise((resolve) => {
+          resolve(data.doc.data as any);
         });
       },
       store: async ({ documentName, state }) => {
-        await db
-          .update(document)
-          .set({ content: state as any })
-          .where(eq(document.id, documentName));
+        const res = await fetch(
+          `http://localhost:3000/api/set-document/${documentName}/${encodeURI(state.toString())}`,
+          {
+            method: "POST",
+          },
+        );
       },
     }),
   ],

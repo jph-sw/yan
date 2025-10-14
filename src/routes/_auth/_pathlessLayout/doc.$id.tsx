@@ -50,6 +50,7 @@ function RouteComponent() {
         <div className="max-w-5xl w-full">
           <div id="content">{document.title}</div>
           <Editor
+            key={document.id}
             document={document}
             user={user!}
             isEditMode={isEditMode}

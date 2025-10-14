@@ -24,11 +24,32 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { CreateCollectionForm } from "./create-collection-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDocument } from "@/utils/data/documents";
 import { User } from "better-auth";
+
+// Helper functions for localStorage
+const STORAGE_KEY = "doitwrite-collection-states";
+
+function loadCollectionStates(): Record<string, boolean> {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch (error) {
+    console.error("Error loading collection states:", error);
+    return {};
+  }
+}
+
+function saveCollectionStates(states: Record<string, boolean>) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+  } catch (error) {
+    console.error("Error saving collection states:", error);
+  }
+}
 
 export function NavMain({
   collections,
@@ -52,8 +73,19 @@ export function NavMain({
   user: User;
 }) {
   const queryClient = useQueryClient();
-
   const [isCreatingNewDocument, setIsCreatingNewDocument] = useState(false);
+  const [openStates, setOpenStates] = useState<Record<string, boolean>>({});
+
+  // Load initial states from localStorage
+  useEffect(() => {
+    const savedStates = loadCollectionStates();
+    setOpenStates(savedStates);
+  }, []);
+
+  // Save states when they change
+  useEffect(() => {
+    saveCollectionStates(openStates);
+  }, [openStates]);
 
   const createDocumentMutation = useMutation({
     mutationFn: async (data: { collectionId: string; title: string }) => {
@@ -77,7 +109,17 @@ export function NavMain({
       <SidebarGroupLabel>Collections</SidebarGroupLabel>
       <SidebarMenu>
         {collections.map((collection) => (
-          <Collapsible key={collection.name} asChild>
+          <Collapsible
+            key={collection.id}
+            asChild
+            open={openStates[collection.id] ?? false}
+            onOpenChange={(open) => {
+              setOpenStates((prev) => ({
+                ...prev,
+                [collection.id]: open,
+              }));
+            }}
+          >
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={collection.name}>
                 <Link to="/collection/$id" params={{ id: collection.id }}>
@@ -100,7 +142,6 @@ export function NavMain({
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {/* Future sub-items can go here */}
                   {isCreatingNewDocument && (
                     <SidebarMenuSubItem key={"new_item"}>
                       <form
@@ -123,7 +164,7 @@ export function NavMain({
                   {documents
                     .filter((doc) => doc.collectionId === collection.id)
                     .map((doc) => (
-                      <SidebarMenuSubItem key={doc.title}>
+                      <SidebarMenuSubItem key={doc.id}>
                         <SidebarMenuSubButton asChild>
                           <Link to="/doc/$id" params={{ id: doc.id }}>
                             <span>{doc.title}</span>
@@ -150,7 +191,6 @@ export function NavMain({
             <DialogDescription>
               Here you can create a new content collection
             </DialogDescription>
-            {/* Form for creating a new collection would go here */}
             <CreateCollectionForm />
           </DialogContent>
         </Dialog>

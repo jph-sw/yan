@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import {
   HeadContent,
-  Link,
   Outlet,
   Scripts,
   createRootRouteWithContext,
@@ -14,13 +13,9 @@ import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import { NotFound } from "@/components/NotFound";
 import appCss from "@/styles/app.css?url";
 import { seo } from "@/utils/seo";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { collectionsQuery } from "@/utils/data/collections";
 import { ThemeProvider } from "@/utils/theme-provider";
 import { documentsQueryOptions } from "@/utils/data/documents";
-import { auth } from "@/utils/auth";
-import { authClient } from "@/utils/auth-client";
 import { useAuthQueries } from "@/utils/data/auth-queries";
 
 export const Route = createRootRouteWithContext<{

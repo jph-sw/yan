@@ -45,6 +45,7 @@ export function Editor({
     onUpdate(props) {
       setIsEditMode(props.editor.isEditable);
     },
+    immediatelyRender: false,
     extensions: [
       Slash.configure({
         suggestion: {
