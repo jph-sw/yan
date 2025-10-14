@@ -37,7 +37,11 @@ export const createCollection = createServerFn({
 
     const newCollection = await db
       .insert(collection)
-      .values({ id: crypto.randomUUID(), name: data.name })
+      .values({
+        id: crypto.randomUUID(),
+        name: data.name,
+        createdAt: new Date(),
+      })
       .returning();
     return newCollection[0];
   });

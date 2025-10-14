@@ -58,6 +58,28 @@ export const getDocumentById = createServerFn({ method: "GET" })
     return doc;
   });
 
+export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({ collectionId: z.string().min(1, "Collection ID is required") }),
+  )
+  .handler(async ({ data }) => {
+    const docs = await db
+      .select()
+      .from(document)
+      .where(eq(document.collectionId, data.collectionId))
+      .all();
+    return docs;
+  });
+
+export const getDocumentsByCollectionIdQueryOptions = (collectionId: string) =>
+  queryOptions({
+    queryKey: ["documents", collectionId],
+    queryFn: async () => {
+      return await getDocumentsByCollectionId({ data: { collectionId } });
+    },
+    enabled: !!collectionId,
+  });
+
 export const documentsQueryOptions = queryOptions({
   queryKey: ["documents"],
   queryFn: async () => {

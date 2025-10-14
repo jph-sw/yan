@@ -5,6 +5,15 @@ import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { User } from "better-auth";
 import { useEffect } from "react";
+import {
+  Slash,
+  SlashCmd,
+  SlashCmdProvider,
+  enableKeyboardNavigation,
+} from "@harshtalks/slash-tiptap";
+import { suggestions } from "./slash-command";
+import { Placeholder } from "@tiptap/extensions";
+import { TableKit } from "@tiptap/extension-table";
 
 export function Editor({
   document,
@@ -37,6 +46,17 @@ export function Editor({
       setIsEditMode(props.editor.isEditable);
     },
     extensions: [
+      Slash.configure({
+        suggestion: {
+          items: () => suggestions,
+        },
+      }),
+      TableKit.configure({
+        table: { resizable: true },
+      }),
+      Placeholder.configure({
+        placeholder: "Press / to see available commands",
+      }),
       StarterKit.configure({}),
       Collaboration.configure({
         document: provider.document,
@@ -49,6 +69,11 @@ export function Editor({
         },
       }),
     ],
+    editorProps: {
+      handleDOMEvents: {
+        keydown: (_, v) => enableKeyboardNavigation(v),
+      },
+    },
   });
 
   useEffect(() => {
@@ -61,7 +86,33 @@ export function Editor({
 
   return (
     <div className="prose  dark:prose-invert">
-      <EditorContent editor={editor} />
+      <SlashCmdProvider>
+        <EditorContent editor={editor} />
+        <SlashCmd.Root editor={editor}>
+          <SlashCmd.Cmd className="bg-secondary p-1 rounded-md w-50">
+            <SlashCmd.Empty>No commands available</SlashCmd.Empty>
+            <SlashCmd.List>
+              {suggestions.map((item) => {
+                return (
+                  <SlashCmd.Item
+                    value={item.title}
+                    onCommand={(val) => {
+                      item.command(val);
+                    }}
+                    key={item.title}
+                    className="w-full rounded hover:bg-background focus:outline px-2 py-1 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      {item.icon}
+                      <span className="text-sm">{item.title}</span>
+                    </div>
+                  </SlashCmd.Item>
+                );
+              })}
+            </SlashCmd.List>
+          </SlashCmd.Cmd>
+        </SlashCmd.Root>
+      </SlashCmdProvider>
     </div>
   );
 }

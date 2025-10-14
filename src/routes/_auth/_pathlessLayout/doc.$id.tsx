@@ -38,8 +38,6 @@ function RouteComponent() {
     getCollectionByDocIdQuery(params.id),
   );
 
-  const handleSave = (updatedContent: string) => {};
-
   return (
     <div className="w-full flex flex-col items-center py-4">
       <Header
