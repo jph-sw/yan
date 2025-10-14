@@ -1,6 +1,7 @@
 import {
   Calendar,
   Home,
+  HomeIcon,
   Inbox,
   PlusIcon,
   Search,
@@ -82,6 +83,20 @@ export function AppSidebar({
   return (
     <Sidebar>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>App</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/home">
+                    <HomeIcon /> Home
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         <NavMain collections={collections} user={user} documents={documents} />
       </SidebarContent>
     </Sidebar>

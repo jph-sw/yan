@@ -71,6 +71,28 @@ export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
     return docs;
   });
 
+export const getDocumentsByUserId = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({ userId: z.string().min(1, "User ID is required") }),
+  )
+  .handler(async ({ data }) => {
+    const docs = await db
+      .select()
+      .from(document)
+      .where(eq(document.createdBy, data.userId))
+      .all();
+    return docs;
+  });
+
+export const getDocumentsByUserIdQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ["documents", "user", userId],
+    queryFn: async () => {
+      return await getDocumentsByUserId({ data: { userId } });
+    },
+    enabled: !!userId,
+  });
+
 export const getDocumentsByCollectionIdQueryOptions = (collectionId: string) =>
   queryOptions({
     queryKey: ["documents", collectionId],
