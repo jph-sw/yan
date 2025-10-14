@@ -11,6 +11,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -29,6 +30,7 @@ import { CreateCollectionForm } from "./create-collection-form";
 import { Link } from "@tanstack/react-router";
 import { NavMain } from "./nav-main";
 import { User } from "better-auth";
+import { NavUser } from "./nav-user";
 
 // Menu items.
 const items = [
@@ -99,6 +101,9 @@ export function AppSidebar({
         </SidebarGroup>
         <NavMain collections={collections} user={user} documents={documents} />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
