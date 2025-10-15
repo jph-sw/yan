@@ -21,6 +21,8 @@ FROM checks AS build
 RUN bun run build
 RUN bun run build:server
 
+RUN chmod +x docker-entrypoint.sh
+
 # 5. Final production image
 FROM base AS runtime
 WORKDIR /app
@@ -29,7 +31,14 @@ ENV PORT=3000
 
 COPY --from=build /app/dist ./dist/
 COPY --from=build /app/node_modules ./node_modules/
+COPY --from=build /app/docker-entrypoint.sh ./docker-entrypoint.sh
+COPY --from=build /app/drizzle ./drizzle/
+
+RUN mkdir -p /app/data && \
+    chown -R bun:bun /app && \
+    chmod -R 755 /app
+
 
 USER bun
 EXPOSE 3000/tcp
-CMD ["bun", "dist/server.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

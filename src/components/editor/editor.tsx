@@ -36,7 +36,7 @@ export function Editor({
   setIsEditMode: (isEditMode: boolean) => void;
 }) {
   const provider = new HocuspocusProvider({
-    url: "ws://127.0.0.1:1234/collaboration",
+    url: process.env.WS_URL || "ws://127.0.0.1:1234/collaboration",
     name: document.id,
   });
 

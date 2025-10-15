@@ -10,6 +10,8 @@ export const Route = createFileRoute("/api/set-document/$id")({
         const buffer = await request.arrayBuffer();
         const state = Buffer.from(buffer).toString("base64");
 
+        console.log("Updating document", params.id, " with\n", state);
+
         await db
           .update(document)
           .set({ content: state })

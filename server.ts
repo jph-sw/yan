@@ -67,8 +67,8 @@ import path from "node:path";
 
 // Configuration
 const SERVER_PORT = Number(process.env.PORT ?? 3000);
-const CLIENT_DIRECTORY = "./client";
-const SERVER_ENTRY_POINT = "./server/server.js";
+const CLIENT_DIRECTORY = "/app/dist/client";
+const SERVER_ENTRY_POINT = "/app/dist/server/server.js";
 
 // Logging utilities for professional output
 const log = {
