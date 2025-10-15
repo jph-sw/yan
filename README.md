@@ -1,5 +1,14 @@
 # yan (yet-another-note)
 
+yan is a just another selfhosted note-taking/wiki app. I really tried to make something that's actually usable and easy to selfhost. 
+
+yan is also very fast (lightning emoji)
+
+## Structure
+
+**`jphsw/yan`** This is the main application
+**`jphsw/yan-ws`** This is the websocket server for collaboration
+
 ## Basic Setup
 
 **Docker Compose**
