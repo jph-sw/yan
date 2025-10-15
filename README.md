@@ -1,72 +1,63 @@
-# Welcome to TanStack.com!
+# yan (yet-another-note)
 
-This site is built with TanStack Router!
+yan is a just another selfhosted note-taking/wiki app. I really tried to make something that's actually usable and easy to selfhost. 
 
-- [TanStack Router Docs](https://tanstack.com/router)
-
-It's deployed automagically with Netlify!
-
-- [Netlify](https://netlify.com/)
-
-## Development
-
-From your terminal:
-
-```sh
-pnpm install
-pnpm dev
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
-
-## Editing and previewing the docs of TanStack projects locally
-
-The documentations for all TanStack projects except for `React Charts` are hosted on [https://tanstack.com](https://tanstack.com), powered by this TanStack Router app.
-In production, the markdown doc pages are fetched from the GitHub repos of the projects, but in development they are read from the local file system.
-
-Follow these steps if you want to edit the doc pages of a project (in these steps we'll assume it's [`TanStack/form`](https://github.com/tanstack/form)) and preview them locally :
-
-1. Create a new directory called `tanstack`.
-
-```sh
-mkdir tanstack
-```
-
-2. Enter the directory and clone this repo and the repo of the project there.
-
-```sh
-cd tanstack
-git clone git@github.com:TanStack/tanstack.com.git
-git clone git@github.com:TanStack/form.git
-```
-
-> [!NOTE]
-> Your `tanstack` directory should look like this:
->
-> ```
-> tanstack/
->    |
->    +-- form/
->    |
->    +-- tanstack.com/
-> ```
+yan is also very fast (lightning emoji)
 
 > [!WARNING]
-> Make sure the name of the directory in your local file system matches the name of the project's repo. For example, `tanstack/form` must be cloned into `form` (this is the default) instead of `some-other-name`, because that way, the doc pages won't be found.
+> yan is currently not production ready. PLEASE DO NOT OPEN YAN TO THE INTERNET
 
-3. Enter the `tanstack/tanstack.com` directory, install the dependencies and run the app in dev mode:
+## Structure
 
-```sh
-cd tanstack.com
-pnpm i
-# The app will run on https://localhost:3000 by default
-pnpm dev
+**`jphsw/yan`** This is the main application
+
+**`jphsw/yan-ws`** This is the websocket server for collaboration
+
+## Basic Setup
+
+**Docker Compose**
+
+```yaml
+services:
+  yan:
+    image: "jphsw/yan:latest"
+    container_name: yan
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "file:/app/data/local.db" 
+      BETTER_AUTH_SECRET: "blbabla"
+      BETTER_AUTH_URL: "http://localhost:3000"
+      WS_URL: "http://yan-ws:1234/collaboration"
+    volumes:
+      - yan-data:/app/data
+    restart: unless-stopped
+    
+  yan-ws:
+    image: "jphsw/yan-ws:latest"
+    container_name: yan-ws
+    ports:
+      - "1234:1234"
+    environment:
+      YAN_URL: "http://yan:3000"
+    depends_on:
+      - yan
+    restart: unless-stopped
+    
+volumes:
+  yan-data:
 ```
 
-4. Now you can visit http://localhost:3000/form/latest/docs/overview in the browser and see the changes you make in `tanstack/form/docs`.
-
-> [!NOTE]
-> The updated pages need to be manually reloaded in the browser.
-
-> [!WARNING]
-> You will need to update the `docs/config.json` file (in the project's repo) if you add a new doc page!
+## Roadmap
+- publishing documents
+- comments
+- icons for collections
+- more tabs on homepage (**favorites**, last viewed etc)
+- more markdown features
+- **images** this is really important
+- configuration of app (app title, colors etc)
+- user management with teams support
+- permissions
+- settings page for that ^^
+- spreadsheet support? (you can already create tables in markdown, but what about excel imports?)
+- export to md/pdf/word etc
