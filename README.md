@@ -60,3 +60,4 @@ volumes:
 - permissions
 - settings page for that ^^
 - spreadsheet support? (you can already create tables in markdown, but what about excel imports?)
+- export to md/pdf/word etc
