@@ -72,7 +72,7 @@ export function Header({
             onClick={() => setIsEditMode(false)}
             variant="default"
           >
-            Save
+            Done
           </Button>
         ) : (
           <Button
