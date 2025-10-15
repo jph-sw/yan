@@ -74,15 +74,14 @@ export function NavMain({
 }) {
   const queryClient = useQueryClient();
   const [isCreatingNewDocument, setIsCreatingNewDocument] = useState(false);
+  const [isCreatingNewCollection, setIsCreatingNewCollection] = useState(false);
   const [openStates, setOpenStates] = useState<Record<string, boolean>>({});
 
-  // Load initial states from localStorage
   useEffect(() => {
     const savedStates = loadCollectionStates();
     setOpenStates(savedStates);
   }, []);
 
-  // Save states when they change
   useEffect(() => {
     saveCollectionStates(openStates);
   }, [openStates]);
@@ -128,7 +127,13 @@ export function NavMain({
               </SidebarMenuButton>
               <div className="absolute top-1.5 right-8 flex items-center">
                 <button
-                  onClick={() => setIsCreatingNewDocument(true)}
+                  onClick={() => {
+                    setIsCreatingNewDocument(true);
+                    setOpenStates((prev) => ({
+                      ...prev,
+                      [collection.id]: true,
+                    }));
+                  }}
                   className="flex aspect-square w-5 items-center justify-center rounded-md p-0 hover:bg-sidebar-accent"
                 >
                   <PlusIcon className="size-4" />
@@ -177,7 +182,12 @@ export function NavMain({
             </SidebarMenuItem>
           </Collapsible>
         ))}
-        <Dialog>
+        <Dialog
+          open={isCreatingNewCollection}
+          onOpenChange={() =>
+            setIsCreatingNewCollection(!isCreatingNewCollection)
+          }
+        >
           <DialogTrigger asChild>
             <SidebarMenuItem>
               <SidebarMenuButton>
@@ -191,7 +201,9 @@ export function NavMain({
             <DialogDescription>
               Here you can create a new content collection
             </DialogDescription>
-            <CreateCollectionForm />
+            <CreateCollectionForm
+              closeDialog={() => setIsCreatingNewCollection(false)}
+            />
           </DialogContent>
         </Dialog>
       </SidebarMenu>

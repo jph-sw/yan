@@ -2,8 +2,15 @@ import { useAppForm } from "@/utils/form";
 import z from "zod";
 import { Button } from "../ui/button";
 import { createCollection } from "@/utils/data/collections";
+import { useQueryClient } from "@tanstack/react-query";
 
-export function CreateCollectionForm() {
+export function CreateCollectionForm({
+  closeDialog,
+}: {
+  closeDialog: () => void;
+}) {
+  const queryClient = useQueryClient();
+
   const form = useAppForm({
     defaultValues: {
       name: "",
@@ -15,6 +22,8 @@ export function CreateCollectionForm() {
     },
     onSubmit: async ({ value }) => {
       await createCollection({ data: { name: value.name } });
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+      closeDialog();
     },
   });
 
@@ -40,7 +49,7 @@ export function CreateCollectionForm() {
         selector={(state) => [state.canSubmit, state.isSubmitting]}
         children={([canSubmit, isSubmitting]) => (
           <>
-            <Button className="mt-2" type="submit" disabled={!canSubmit}>
+            <Button className="mt-4" type="submit" disabled={!canSubmit}>
               {isSubmitting ? "..." : "Submit"}
             </Button>
           </>

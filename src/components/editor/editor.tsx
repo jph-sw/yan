@@ -4,7 +4,7 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { User } from "better-auth";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Slash,
   SlashCmd,
@@ -14,6 +14,17 @@ import {
 import { suggestions } from "./slash-command";
 import { Placeholder } from "@tiptap/extensions";
 import { TableKit } from "@tiptap/extension-table";
+
+function useHocuspocus(documentId: string) {
+  return useMemo(
+    () =>
+      new HocuspocusProvider({
+        url: process.env.WS_URL || "ws://127.0.0.1:1234/collaboration",
+        name: documentId,
+      }),
+    [documentId],
+  );
+}
 
 export function Editor({
   document,
@@ -35,10 +46,7 @@ export function Editor({
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;
 }) {
-  const provider = new HocuspocusProvider({
-    url: process.env.WS_URL || "ws://127.0.0.1:1234/collaboration",
-    name: document.id,
-  });
+  const provider = useHocuspocus(document.id);
 
   const editor = useEditor({
     editable: false,
@@ -100,8 +108,8 @@ export function Editor({
         <SlashCmd.Root editor={editor}>
           <SlashCmd.Cmd className="bg-secondary p-1 rounded-md w-50">
             <SlashCmd.Empty>No commands available</SlashCmd.Empty>
-            <SlashCmd.List>
-              {suggestions.map((item) => {
+            <SlashCmd.List className="max-h-[300px] overflow-y-auto">
+              {suggestions.map((item, index) => {
                 return (
                   <SlashCmd.Item
                     value={item.title}
@@ -109,7 +117,7 @@ export function Editor({
                       item.command(val);
                     }}
                     key={item.title}
-                    className="w-full rounded hover:bg-background focus:outline px-2 py-1 cursor-pointer"
+                    className="w-full rounded hover:bg-background focus:bg-background data-[selected=true]:bg-background outline-none px-2 py-1 cursor-pointer"
                   >
                     <div className="flex items-center gap-2">
                       {item.icon}
