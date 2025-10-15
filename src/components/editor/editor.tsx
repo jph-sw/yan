@@ -86,7 +86,15 @@ export function Editor({
   }, [isEditMode, editor]);
 
   return (
-    <div className="prose  dark:prose-invert">
+    <div
+      className="prose dark:prose-invert
+          prose-table:w-full prose-table:outline prose-table:overflow-hidden prose-table:rounded-lg
+          prose-thead:bg-muted
+          prose-th:h-10 prose-th:px-6 prose-th:[&:not(:last-child)]:border-e prose-th:py-3 prose-th:font-medium prose-th:text-foreground prose-th:border-border
+          prose-tr:border-b-2 prose-tr:border-border prose-tr:hover:bg-muted/50 prose-tr:transition-colors
+          prose-td:p-4 prose-td:[&:not(:last-child)]:border-e
+ prose-td:align-middle [&_td_p]:m-0 [&_th_p]:m-0"
+    >
       <SlashCmdProvider>
         <EditorContent editor={editor} />
         <SlashCmd.Root editor={editor}>
