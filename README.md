@@ -7,12 +7,6 @@ yan is also very fast (lightning emoji)
 > [!WARNING]
 > yan is currently not production ready. PLEASE DO NOT OPEN YAN TO THE INTERNET
 
-## Structure
-
-**`jphsw/yan`** This is the main application
-
-**`jphsw/yan-ws`** This is the websocket server for collaboration
-
 ## Basic Setup
 
 **Docker Compose**
