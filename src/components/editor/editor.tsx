@@ -17,6 +17,8 @@ import { TableKit } from "@tiptap/extension-table";
 import { Markdown } from "@tiptap/markdown";
 import { Button } from "../ui/button";
 import { getRandomColor } from "@/lib/utils";
+import FileHandler from "@tiptap/extension-file-handler";
+import Image from "@tiptap/extension-image";
 
 function useHocuspocus(documentId: string) {
   return useMemo(
@@ -59,6 +61,7 @@ export function Editor({
     immediatelyRender: false,
     extensions: [
       Markdown,
+      Image,
       Slash.configure({
         suggestion: {
           items: () => suggestions,
@@ -79,6 +82,57 @@ export function Editor({
         user: {
           name: user.name,
           color: getRandomColor(),
+        },
+      }),
+      FileHandler.configure({
+        allowedMimeTypes: [
+          "image/png",
+          "image/jpeg",
+          "image/gif",
+          "image/webp",
+        ],
+        onDrop: (currentEditor, files, pos) => {
+          files.forEach((file) => {
+            const fileReader = new FileReader();
+
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+              currentEditor
+                .chain()
+                .insertContentAt(pos, {
+                  type: "image",
+                  attrs: {
+                    src: fileReader.result,
+                  },
+                })
+                .focus()
+                .run();
+            };
+          });
+        },
+        onPaste: (currentEditor, files, htmlContent) => {
+          files.forEach((file) => {
+            if (htmlContent) {
+              console.log(htmlContent); // eslint-disable-line no-console
+              return false;
+            }
+
+            const fileReader = new FileReader();
+
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+              currentEditor
+                .chain()
+                .insertContentAt(currentEditor.state.selection.anchor, {
+                  type: "image",
+                  attrs: {
+                    src: fileReader.result,
+                  },
+                })
+                .focus()
+                .run();
+            };
+          });
         },
       }),
     ],
@@ -107,9 +161,6 @@ export function Editor({
           prose-td:p-4 prose-td:[&:not(:last-child)]:border-e
  prose-td:align-middle [&_td_p]:m-0 [&_th_p]:m-0"
     >
-      <Button onClick={() => console.log(editor?.getMarkdown())}>
-        Print Markdown
-      </Button>
       <SlashCmdProvider>
         <EditorContent editor={editor} />
         <SlashCmd.Root editor={editor}>
