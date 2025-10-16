@@ -14,6 +14,9 @@ import {
 import { suggestions } from "./slash-command";
 import { Placeholder } from "@tiptap/extensions";
 import { TableKit } from "@tiptap/extension-table";
+import { Markdown } from "@tiptap/markdown";
+import { Button } from "../ui/button";
+import { getRandomColor } from "@/lib/utils";
 
 function useHocuspocus(documentId: string) {
   return useMemo(
@@ -22,7 +25,7 @@ function useHocuspocus(documentId: string) {
         url: process.env.WS_URL || "ws://127.0.0.1:1234/collaboration",
         name: documentId,
       }),
-    [documentId],
+    [documentId]
   );
 }
 
@@ -55,6 +58,7 @@ export function Editor({
     },
     immediatelyRender: false,
     extensions: [
+      Markdown,
       Slash.configure({
         suggestion: {
           items: () => suggestions,
@@ -74,7 +78,7 @@ export function Editor({
         provider: provider,
         user: {
           name: user.name,
-          color: "#f783ac",
+          color: getRandomColor(),
         },
       }),
     ],
@@ -103,6 +107,9 @@ export function Editor({
           prose-td:p-4 prose-td:[&:not(:last-child)]:border-e
  prose-td:align-middle [&_td_p]:m-0 [&_th_p]:m-0"
     >
+      <Button onClick={() => console.log(editor?.getMarkdown())}>
+        Print Markdown
+      </Button>
       <SlashCmdProvider>
         <EditorContent editor={editor} />
         <SlashCmd.Root editor={editor}>

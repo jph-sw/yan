@@ -16,6 +16,7 @@ export function EditProfileForm({ user }: { user: User }) {
     onSubmit: async (values) => {
       await authClient.updateUser({
         name: values.value.name,
+        image: values.value.image,
       });
 
       queryClient.invalidateQueries({ queryKey: ["auth", "user"] });
@@ -28,6 +29,10 @@ export function EditProfileForm({ user }: { user: User }) {
         form.handleSubmit();
       }}
     >
+      <form.AppField
+        name="image"
+        children={(field) => <field.ImageField label="Profile Image" />}
+      />
       <div className="grid grid-cols-2 gap-4">
         <form.AppField
           name="name"

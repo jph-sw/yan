@@ -50,6 +50,7 @@
     "@tiptap/extension-collaboration-caret": "^3.7.1",
     "@tiptap/extension-table": "^3.7.1",
     "@tiptap/extension-typography": "^3.7.1",
+    "@tiptap/markdown": "^3.7.2",
     "@tiptap/pm": "^3.7.1",
     "@tiptap/react": "^3.7.1",
     "@tiptap/starter-kit": "^3.7.1",

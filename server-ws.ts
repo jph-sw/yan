@@ -17,7 +17,7 @@ const server = new Server({
 
           console.log("Fetched document:", doc?.content);
           if (doc) {
-            resolve(doc.content as Uint8Array);
+            resolve(doc.content as unknown as Uint8Array);
           } else {
             resolve(null);
           }
@@ -27,7 +27,7 @@ const server = new Server({
         await db
           .update(document)
           .set({
-            content: state,
+            content: state as unknown as string,
           })
           .where(eq(document.id, documentName));
       },
