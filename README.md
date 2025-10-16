@@ -38,7 +38,7 @@ volumes:
 - [ ] more tabs on homepage (**favorites**, last viewed etc)
 - [ ] more markdown features
 - [ ] **images** this is really important
-- [ ]configuration of app (app title, colors etc)
+- [ ] configuration of app (app title, colors etc)
 - [ ] user management with teams support
 - [ ] permissions
 - [ ] settings page for that ^^
