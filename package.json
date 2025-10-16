@@ -11,6 +11,7 @@
     "db:studio": "drizzle-kit studio",
     "build:server": "bun build server.ts --outfile dist/server.js --target=bun --format=cjs --minify",
     "build:migrate": "bun build migrate.ts --outfile dist/migrate.js --target=bun --format=cjs --minify",
+    "build:ws": "bun build server-ws.ts --outfile dist/server-ws.js --target=bun --format=cjs --minify",
     "db:migrate": "bun run src/db/migrate.ts"
   },
   "dependencies": {
