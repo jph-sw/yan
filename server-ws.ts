@@ -24,6 +24,7 @@ const server = new Server({
         });
       },
       store: async ({ documentName, state }) => {
+        console.log("Saving", documentName, "\n", state);
         await db
           .update(document)
           .set({
@@ -33,6 +34,7 @@ const server = new Server({
       },
     }),
   ],
+  port: 1234,
 });
 
-server.listen(1234);
+server.listen();

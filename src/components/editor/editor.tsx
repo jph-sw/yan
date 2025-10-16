@@ -24,10 +24,10 @@ function useHocuspocus(documentId: string) {
   return useMemo(
     () =>
       new HocuspocusProvider({
-        url: process.env.WS_URL || "ws://127.0.0.1:1234/collaboration",
+        url: process.env.WS_URL || "ws://localhost:1234",
         name: documentId,
       }),
-    [documentId]
+    [documentId],
   );
 }
 

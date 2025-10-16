@@ -8,6 +8,20 @@
       "when": 1760458639260,
       "tag": "0000_mighty_drax",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1760627431278,
+      "tag": "0001_open_dagger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1760630251377,
+      "tag": "0002_spotty_polaris",
+      "breakpoints": true
     }
   ]
 }

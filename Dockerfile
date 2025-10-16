@@ -20,6 +20,7 @@ FROM checks AS build
 # Source already copied in the previous stage; dependencies are present
 RUN bun run build
 RUN bun run build:server
+RUN bun run build:ws
 
 RUN chmod +x docker-entrypoint.sh
 
