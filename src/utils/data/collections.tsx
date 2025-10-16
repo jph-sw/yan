@@ -13,7 +13,7 @@ export const getCollections = createServerFn({ method: "GET" }).handler(
       .from(collection)
       .orderBy(desc(collection.createdAt));
     return collections;
-  },
+  }
 );
 
 export const collectionsQuery = queryOptions({
@@ -30,16 +30,16 @@ export const createCollection = createServerFn({
   .inputValidator(
     z.object({
       name: z.string().min(1).max(100),
-    }),
+      icon: z.string(),
+    })
   )
   .handler(async ({ data }) => {
-    console.log("Creating collection with name:", data.name);
-
     const newCollection = await db
       .insert(collection)
       .values({
         id: crypto.randomUUID(),
         name: data.name,
+        icon: data.icon,
         createdAt: new Date(),
       })
       .returning();
@@ -52,7 +52,7 @@ export const getCollectionById = createServerFn({
   .inputValidator(
     z.object({
       collectionId: z.string().min(1),
-    }),
+    })
   )
   .handler(async ({ data }) => {
     const collections = await db

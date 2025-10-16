@@ -1,4 +1,4 @@
-import { HomeIcon } from "lucide-react";
+import { HomeIcon, LucideIcon, LucideProps } from "lucide-react";
 
 import {
   Sidebar,
@@ -15,6 +15,8 @@ import { Link } from "@tanstack/react-router";
 import { NavMain } from "./nav-main";
 import { User } from "better-auth";
 import { NavUser } from "./nav-user";
+import React from "react";
+import { DynamicIcon, IconName } from "lucide-react/dynamic";
 
 export function AppSidebar({
   collections,
@@ -25,6 +27,7 @@ export function AppSidebar({
     id: string;
     name: string;
     createdAt: Date | null;
+    icon: string;
   }[];
   documents: {
     id: string;

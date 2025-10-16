@@ -29,8 +29,8 @@ import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDocument } from "@/utils/data/documents";
 import { User } from "better-auth";
+import { DynamicIcon, IconName } from "lucide-react/dynamic";
 
-// Helper functions for localStorage
 const STORAGE_KEY = "doitwrite-collection-states";
 
 function loadCollectionStates(): Record<string, boolean> {
@@ -60,6 +60,7 @@ export function NavMain({
     id: string;
     name: string;
     createdAt: Date | null;
+    icon: string;
   }[];
   documents: {
     id: string;
@@ -122,6 +123,7 @@ export function NavMain({
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={collection.name}>
                 <Link to="/collection/$id" params={{ id: collection.id }}>
+                  <DynamicIcon name={collection.icon as IconName} />
                   <span>{collection.name}</span>
                 </Link>
               </SidebarMenuButton>

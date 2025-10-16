@@ -14,14 +14,17 @@ export function CreateCollectionForm({
   const form = useAppForm({
     defaultValues: {
       name: "",
+      icon: "",
     },
     validators: {
       onChange: z.object({
         name: z.string().min(1, "Name is required"),
+        icon: z.string(),
       }),
     },
     onSubmit: async ({ value }) => {
-      await createCollection({ data: { name: value.name } });
+      console.log("submitting", value);
+      await createCollection({ data: { name: value.name, icon: value.icon } });
       queryClient.invalidateQueries({ queryKey: ["collections"] });
       closeDialog();
     },
@@ -44,6 +47,10 @@ export function CreateCollectionForm({
             .min(1, "Name is required")
             .max(100, "Name is too long"),
         }}
+      />
+      <form.AppField
+        name="icon"
+        children={(field) => <field.IconField label="Icon" />}
       />
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
