@@ -29,8 +29,6 @@ import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDocument } from "@/utils/data/documents";
 import { User } from "better-auth";
-import { IconName } from "lucide-react/dynamic";
-import { IconRenderer } from "../ui/icon-picker";
 
 const STORAGE_KEY = "doitwrite-collection-states";
 
