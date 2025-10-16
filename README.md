@@ -51,7 +51,7 @@ volumes:
 ## Roadmap
 - publishing documents
 - comments
-- icons for collections
+[x] icons for collections
 - more tabs on homepage (**favorites**, last viewed etc)
 - more markdown features
 - **images** this is really important
