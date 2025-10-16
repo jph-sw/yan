@@ -29,6 +29,7 @@ import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDocument } from "@/utils/data/documents";
 import { User } from "better-auth";
+import { Collection, Document } from "@/utils/types";
 
 const STORAGE_KEY = "doitwrite-collection-states";
 
@@ -55,21 +56,8 @@ export function NavMain({
   user,
   documents,
 }: {
-  collections: {
-    id: string;
-    name: string;
-    createdAt: Date | null;
-    icon: string;
-  }[];
-  documents: {
-    id: string;
-    title: string;
-    createdAt: Date | null;
-    collectionId: string | null;
-    createdBy: string | null;
-    updatedBy: string | null;
-    content: string;
-  }[];
+  collections: Collection[];
+  documents: Document[];
   user: User;
 }) {
   const queryClient = useQueryClient();

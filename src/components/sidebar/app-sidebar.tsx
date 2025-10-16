@@ -1,4 +1,4 @@
-import { HomeIcon, LucideIcon, LucideProps } from "lucide-react";
+import { DownloadCloud, HomeIcon, LucideIcon, LucideProps } from "lucide-react";
 
 import {
   Sidebar,
@@ -17,27 +17,16 @@ import { User } from "better-auth";
 import { NavUser } from "./nav-user";
 import React from "react";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { Collection, Document } from "@/utils/types";
+import { NavSearch } from "./nav-search";
 
 export function AppSidebar({
   collections,
   documents,
   user,
 }: {
-  collections: {
-    id: string;
-    name: string;
-    createdAt: Date | null;
-    icon: string;
-  }[];
-  documents: {
-    id: string;
-    title: string;
-    createdAt: Date | null;
-    collectionId: string | null;
-    createdBy: string | null;
-    updatedBy: string | null;
-    content: string;
-  }[];
+  collections: Collection[];
+  documents: Document[];
   user: User;
 }) {
   return (
@@ -54,6 +43,7 @@ export function AppSidebar({
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <NavSearch collections={collections} documents={documents} />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
