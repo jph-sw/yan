@@ -10,9 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as PathlessLayoutRouteImport } from './routes/_pathlessLayout'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PIdRouteImport } from './routes/p.$id'
 import { Route as AuthPathlessLayoutRouteRouteImport } from './routes/_auth/_pathlessLayout/route'
 import { Route as ApiSetDocumentIdRouteImport } from './routes/api/set-document.$id'
 import { Route as ApiGetDocumentIdRouteImport } from './routes/api/get-document.$id'
@@ -30,10 +30,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PathlessLayoutRoute = PathlessLayoutRouteImport.update({
-  id: '/_pathlessLayout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -41,6 +37,11 @@ const AuthRoute = AuthRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PIdRoute = PIdRouteImport.update({
+  id: '/p/$id',
+  path: '/p/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthPathlessLayoutRouteRoute = AuthPathlessLayoutRouteRouteImport.update({
@@ -106,6 +107,7 @@ const AuthPathlessLayoutCollectionIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/p/$id': typeof PIdRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
   '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -120,6 +122,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/p/$id': typeof PIdRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
   '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -135,9 +138,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
-  '/_pathlessLayout': typeof PathlessLayoutRoute
   '/login': typeof LoginRoute
   '/_auth/_pathlessLayout': typeof AuthPathlessLayoutRouteRouteWithChildren
+  '/p/$id': typeof PIdRoute
   '/_auth/_pathlessLayout/home': typeof AuthPathlessLayoutHomeRoute
   '/_auth/_pathlessLayout/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -154,6 +157,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/p/$id'
     | '/home'
     | '/settings'
     | '/api/auth/$'
@@ -168,6 +172,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/p/$id'
     | '/home'
     | '/settings'
     | '/api/auth/$'
@@ -182,9 +187,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
-    | '/_pathlessLayout'
     | '/login'
     | '/_auth/_pathlessLayout'
+    | '/p/$id'
     | '/_auth/_pathlessLayout/home'
     | '/_auth/_pathlessLayout/settings'
     | '/api/auth/$'
@@ -200,8 +205,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
-  PathlessLayoutRoute: typeof PathlessLayoutRoute
   LoginRoute: typeof LoginRoute
+  PIdRoute: typeof PIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiGetDocumentIdRoute: typeof ApiGetDocumentIdRoute
   ApiSetDocumentIdRoute: typeof ApiSetDocumentIdRoute
@@ -216,13 +221,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_pathlessLayout': {
-      id: '/_pathlessLayout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PathlessLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -235,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p/$id': {
+      id: '/p/$id'
+      path: '/p/$id'
+      fullPath: '/p/$id'
+      preLoaderRoute: typeof PIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/_pathlessLayout': {
@@ -371,8 +376,8 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
-  PathlessLayoutRoute: PathlessLayoutRoute,
   LoginRoute: LoginRoute,
+  PIdRoute: PIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiGetDocumentIdRoute: ApiGetDocumentIdRoute,
   ApiSetDocumentIdRoute: ApiSetDocumentIdRoute,

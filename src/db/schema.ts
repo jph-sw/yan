@@ -23,6 +23,7 @@ export const document = sqliteTable("document", {
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
   createdBy: text("created_by").references(() => user.id),
   updatedBy: text("updated_by").references(() => user.id),
+  published: integer("published", { mode: "boolean" }).default(false).notNull(),
 });
 
 export const collection = sqliteTable("collection", {

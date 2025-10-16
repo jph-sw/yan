@@ -7,8 +7,25 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Link } from "@tanstack/react-router";
-import { FileIcon, NotebookTextIcon } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
+  FileIcon,
+  NotebookTextIcon,
+  UploadIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
+import { Collection, Document } from "@/utils/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { publishDocument } from "@/utils/data/documents";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function Header({
   collection,
@@ -16,24 +33,20 @@ export function Header({
   isEditMode,
   setIsEditMode,
 }: {
-  collection: {
-    id: string;
-    name: string;
-    createdAt: Date | null;
-  };
-  document: {
-    id: string;
-    title: string;
-    content: string;
-    collectionId: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-    createdBy: string | null;
-    updatedBy: string | null;
-  };
+  collection: Collection;
+  document: Document;
   isEditMode: boolean;
   setIsEditMode: (editMode: boolean) => void;
 }) {
+  const queryClient = useQueryClient();
+
+  const togglePublish = async () => {
+    await publishDocument({
+      data: { id: document.id, published: !document.published },
+    });
+    queryClient.invalidateQueries({ queryKey: ["document", document.id] });
+  };
+
   return (
     <div className="w-full flex justify-between px-4">
       <Breadcrumb>
@@ -83,6 +96,26 @@ export function Header({
             Edit
           </Button>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"sm"} variant={"outline"}>
+              <EllipsisVerticalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-50">
+            <DropdownMenuLabel>Document</DropdownMenuLabel>
+            <DropdownMenuItem
+              className={cn(document.published && "bg-muted")}
+              onClick={(e) => {
+                e.preventDefault();
+                togglePublish();
+              }}
+            >
+              {document.published ? "Unpublish" : "Publish"}
+              <UploadIcon className="ml-auto" />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>{" "}
       </div>
     </div>
   );
