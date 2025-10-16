@@ -18,3 +18,13 @@ export const getUserSession = createServerFn({
     session: userSession.session,
   };
 });
+
+export const getUsers = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const users = await auth.api.listUsers({
+    query: {},
+    headers: getRequestHeaders(),
+  });
+  return users;
+});

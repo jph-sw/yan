@@ -15,7 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { ChevronRight, PlusIcon } from "lucide-react";
+import { ChevronRight, LucideIcon, LucideProps, PlusIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -29,7 +29,8 @@ import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDocument } from "@/utils/data/documents";
 import { User } from "better-auth";
-import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { IconName } from "lucide-react/dynamic";
+import { IconRenderer } from "../ui/icon-picker";
 
 const STORAGE_KEY = "doitwrite-collection-states";
 
@@ -123,7 +124,6 @@ export function NavMain({
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={collection.name}>
                 <Link to="/collection/$id" params={{ id: collection.id }}>
-                  <DynamicIcon name={collection.icon as IconName} />
                   <span>{collection.name}</span>
                 </Link>
               </SidebarMenuButton>

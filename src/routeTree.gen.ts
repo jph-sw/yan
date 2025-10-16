@@ -17,7 +17,11 @@ import { Route as AuthPathlessLayoutRouteRouteImport } from './routes/_auth/_pat
 import { Route as ApiSetDocumentIdRouteImport } from './routes/api/set-document.$id'
 import { Route as ApiGetDocumentIdRouteImport } from './routes/api/get-document.$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthPathlessLayoutSettingsRouteImport } from './routes/_auth/_pathlessLayout/settings'
 import { Route as AuthPathlessLayoutHomeRouteImport } from './routes/_auth/_pathlessLayout/home'
+import { Route as AuthPathlessLayoutSettingsUsersRouteImport } from './routes/_auth/_pathlessLayout/settings.users'
+import { Route as AuthPathlessLayoutSettingsProfileRouteImport } from './routes/_auth/_pathlessLayout/settings.profile'
+import { Route as AuthPathlessLayoutSettingsGeneralRouteImport } from './routes/_auth/_pathlessLayout/settings.general'
 import { Route as AuthPathlessLayoutDocIdRouteImport } from './routes/_auth/_pathlessLayout/doc.$id'
 import { Route as AuthPathlessLayoutCollectionIdRouteImport } from './routes/_auth/_pathlessLayout/collection.$id'
 
@@ -58,11 +62,35 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthPathlessLayoutSettingsRoute =
+  AuthPathlessLayoutSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthPathlessLayoutRouteRoute,
+  } as any)
 const AuthPathlessLayoutHomeRoute = AuthPathlessLayoutHomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => AuthPathlessLayoutRouteRoute,
 } as any)
+const AuthPathlessLayoutSettingsUsersRoute =
+  AuthPathlessLayoutSettingsUsersRouteImport.update({
+    id: '/users',
+    path: '/users',
+    getParentRoute: () => AuthPathlessLayoutSettingsRoute,
+  } as any)
+const AuthPathlessLayoutSettingsProfileRoute =
+  AuthPathlessLayoutSettingsProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthPathlessLayoutSettingsRoute,
+  } as any)
+const AuthPathlessLayoutSettingsGeneralRoute =
+  AuthPathlessLayoutSettingsGeneralRouteImport.update({
+    id: '/general',
+    path: '/general',
+    getParentRoute: () => AuthPathlessLayoutSettingsRoute,
+  } as any)
 const AuthPathlessLayoutDocIdRoute = AuthPathlessLayoutDocIdRouteImport.update({
   id: '/doc/$id',
   path: '/doc/$id',
@@ -79,21 +107,29 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
+  '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
+  '/settings/profile': typeof AuthPathlessLayoutSettingsProfileRoute
+  '/settings/users': typeof AuthPathlessLayoutSettingsUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
+  '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
+  '/settings/profile': typeof AuthPathlessLayoutSettingsProfileRoute
+  '/settings/users': typeof AuthPathlessLayoutSettingsUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,11 +139,15 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/_pathlessLayout': typeof AuthPathlessLayoutRouteRouteWithChildren
   '/_auth/_pathlessLayout/home': typeof AuthPathlessLayoutHomeRoute
+  '/_auth/_pathlessLayout/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/get-document/$id': typeof ApiGetDocumentIdRoute
   '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/_auth/_pathlessLayout/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/_auth/_pathlessLayout/doc/$id': typeof AuthPathlessLayoutDocIdRoute
+  '/_auth/_pathlessLayout/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
+  '/_auth/_pathlessLayout/settings/profile': typeof AuthPathlessLayoutSettingsProfileRoute
+  '/_auth/_pathlessLayout/settings/users': typeof AuthPathlessLayoutSettingsUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -115,21 +155,29 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/home'
+    | '/settings'
     | '/api/auth/$'
     | '/api/get-document/$id'
     | '/api/set-document/$id'
     | '/collection/$id'
     | '/doc/$id'
+    | '/settings/general'
+    | '/settings/profile'
+    | '/settings/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/home'
+    | '/settings'
     | '/api/auth/$'
     | '/api/get-document/$id'
     | '/api/set-document/$id'
     | '/collection/$id'
     | '/doc/$id'
+    | '/settings/general'
+    | '/settings/profile'
+    | '/settings/users'
   id:
     | '__root__'
     | '/'
@@ -138,11 +186,15 @@ export interface FileRouteTypes {
     | '/login'
     | '/_auth/_pathlessLayout'
     | '/_auth/_pathlessLayout/home'
+    | '/_auth/_pathlessLayout/settings'
     | '/api/auth/$'
     | '/api/get-document/$id'
     | '/api/set-document/$id'
     | '/_auth/_pathlessLayout/collection/$id'
     | '/_auth/_pathlessLayout/doc/$id'
+    | '/_auth/_pathlessLayout/settings/general'
+    | '/_auth/_pathlessLayout/settings/profile'
+    | '/_auth/_pathlessLayout/settings/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -213,12 +265,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/_pathlessLayout/settings': {
+      id: '/_auth/_pathlessLayout/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthPathlessLayoutSettingsRouteImport
+      parentRoute: typeof AuthPathlessLayoutRouteRoute
+    }
     '/_auth/_pathlessLayout/home': {
       id: '/_auth/_pathlessLayout/home'
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthPathlessLayoutHomeRouteImport
       parentRoute: typeof AuthPathlessLayoutRouteRoute
+    }
+    '/_auth/_pathlessLayout/settings/users': {
+      id: '/_auth/_pathlessLayout/settings/users'
+      path: '/users'
+      fullPath: '/settings/users'
+      preLoaderRoute: typeof AuthPathlessLayoutSettingsUsersRouteImport
+      parentRoute: typeof AuthPathlessLayoutSettingsRoute
+    }
+    '/_auth/_pathlessLayout/settings/profile': {
+      id: '/_auth/_pathlessLayout/settings/profile'
+      path: '/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof AuthPathlessLayoutSettingsProfileRouteImport
+      parentRoute: typeof AuthPathlessLayoutSettingsRoute
+    }
+    '/_auth/_pathlessLayout/settings/general': {
+      id: '/_auth/_pathlessLayout/settings/general'
+      path: '/general'
+      fullPath: '/settings/general'
+      preLoaderRoute: typeof AuthPathlessLayoutSettingsGeneralRouteImport
+      parentRoute: typeof AuthPathlessLayoutSettingsRoute
     }
     '/_auth/_pathlessLayout/doc/$id': {
       id: '/_auth/_pathlessLayout/doc/$id'
@@ -237,8 +317,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthPathlessLayoutSettingsRouteChildren {
+  AuthPathlessLayoutSettingsGeneralRoute: typeof AuthPathlessLayoutSettingsGeneralRoute
+  AuthPathlessLayoutSettingsProfileRoute: typeof AuthPathlessLayoutSettingsProfileRoute
+  AuthPathlessLayoutSettingsUsersRoute: typeof AuthPathlessLayoutSettingsUsersRoute
+}
+
+const AuthPathlessLayoutSettingsRouteChildren: AuthPathlessLayoutSettingsRouteChildren =
+  {
+    AuthPathlessLayoutSettingsGeneralRoute:
+      AuthPathlessLayoutSettingsGeneralRoute,
+    AuthPathlessLayoutSettingsProfileRoute:
+      AuthPathlessLayoutSettingsProfileRoute,
+    AuthPathlessLayoutSettingsUsersRoute: AuthPathlessLayoutSettingsUsersRoute,
+  }
+
+const AuthPathlessLayoutSettingsRouteWithChildren =
+  AuthPathlessLayoutSettingsRoute._addFileChildren(
+    AuthPathlessLayoutSettingsRouteChildren,
+  )
+
 interface AuthPathlessLayoutRouteRouteChildren {
   AuthPathlessLayoutHomeRoute: typeof AuthPathlessLayoutHomeRoute
+  AuthPathlessLayoutSettingsRoute: typeof AuthPathlessLayoutSettingsRouteWithChildren
   AuthPathlessLayoutCollectionIdRoute: typeof AuthPathlessLayoutCollectionIdRoute
   AuthPathlessLayoutDocIdRoute: typeof AuthPathlessLayoutDocIdRoute
 }
@@ -246,6 +347,8 @@ interface AuthPathlessLayoutRouteRouteChildren {
 const AuthPathlessLayoutRouteRouteChildren: AuthPathlessLayoutRouteRouteChildren =
   {
     AuthPathlessLayoutHomeRoute: AuthPathlessLayoutHomeRoute,
+    AuthPathlessLayoutSettingsRoute:
+      AuthPathlessLayoutSettingsRouteWithChildren,
     AuthPathlessLayoutCollectionIdRoute: AuthPathlessLayoutCollectionIdRoute,
     AuthPathlessLayoutDocIdRoute: AuthPathlessLayoutDocIdRoute,
   }

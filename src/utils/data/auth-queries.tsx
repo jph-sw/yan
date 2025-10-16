@@ -1,5 +1,7 @@
-import { queryOptions } from "@tanstack/react-query";
-import { getUserSession } from "../auth-functions";
+import { mutationOptions, queryOptions } from "@tanstack/react-query";
+import { getUsers, getUserSession } from "../auth-functions";
+import { auth } from "../auth";
+import { User } from "lucide-react";
 
 export const useAuthQueries = {
   all: ["auth"],
@@ -8,5 +10,10 @@ export const useAuthQueries = {
       queryKey: [...useAuthQueries.all, "user"],
       queryFn: () => getUserSession(),
       // queryFn: () => getUserId(),
+    }),
+  users: () =>
+    queryOptions({
+      queryKey: [...useAuthQueries.all, "users"],
+      queryFn: () => getUsers(),
     }),
 };

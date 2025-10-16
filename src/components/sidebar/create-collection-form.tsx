@@ -48,10 +48,10 @@ export function CreateCollectionForm({
             .max(100, "Name is too long"),
         }}
       />
-      <form.AppField
+      {/* <form.AppField
         name="icon"
         children={(field) => <field.IconField label="Icon" />}
-      />
+      /> */}
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
         children={([canSubmit, isSubmitting]) => (
