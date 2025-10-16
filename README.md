@@ -32,15 +32,15 @@ volumes:
 ```
 
 ## Roadmap
-- publishing documents
-- comments
+- [ ] publishing documents
+- [ ] comments
 - [x] icons for collections
-- more tabs on homepage (**favorites**, last viewed etc)
-- more markdown features
-- **images** this is really important
-- configuration of app (app title, colors etc)
-- user management with teams support
-- permissions
-- settings page for that ^^
-- spreadsheet support? (you can already create tables in markdown, but what about excel imports?)
-- export to md/pdf/word etc
+- [ ] more tabs on homepage (**favorites**, last viewed etc)
+- [ ] more markdown features
+- [ ] **images** this is really important
+- [ ]configuration of app (app title, colors etc)
+- [ ] user management with teams support
+- [ ] permissions
+- [ ] settings page for that ^^
+- [ ] spreadsheet support? (you can already create tables in markdown, but what about excel imports?)
+- [ ] export to md/pdf/word etc
