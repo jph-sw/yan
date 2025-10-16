@@ -37,7 +37,7 @@ volumes:
 - [x] icons for collections
 - [ ] more tabs on homepage (**favorites**, last viewed etc)
 - [ ] more markdown features
-- [ ] **images** this is really important
+- [x] **images** this is really important
 - [ ] configuration of app (app title, colors etc)
 - [ ] user management with teams support
 - [ ] permissions
