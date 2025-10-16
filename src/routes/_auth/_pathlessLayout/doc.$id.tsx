@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
   component: RouteComponent,
   loader: async ({ context, params }) => {
     const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user(),
+      useAuthQueries.user()
     );
 
     context.queryClient.ensureQueryData(documentByIdQueryOptions(params.id));
@@ -31,11 +31,11 @@ function RouteComponent() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const { data: document } = useSuspenseQuery(
-    documentByIdQueryOptions(params.id),
+    documentByIdQueryOptions(params.id)
   );
 
   const { data: collection } = useSuspenseQuery(
-    getCollectionByDocIdQuery(params.id),
+    getCollectionByDocIdQuery(params.id)
   );
 
   return (
@@ -47,7 +47,7 @@ function RouteComponent() {
         setIsEditMode={setIsEditMode}
       />
       {document ? (
-        <div className="max-w-5xl w-full">
+        <div className="max-w-5xl w-full px-4 mt-4">
           <div id="content">{document.title}</div>
           <Editor
             key={document.id}

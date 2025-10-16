@@ -28,6 +28,7 @@ export const document = sqliteTable("document", {
 export const collection = sqliteTable("collection", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  icon: text("icon").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }),
 });
 
