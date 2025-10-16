@@ -40,14 +40,14 @@ export const getDocuments = createServerFn({ method: "GET" }).handler(
   async () => {
     const documents = await db.select().from(document).all();
     return documents;
-  }
+  },
 );
 
 export const getDocumentById = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       id: z.string().min(1, "Document ID is required"),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const doc = await db
@@ -60,7 +60,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
 
 export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
   .inputValidator(
-    z.object({ collectionId: z.string().min(1, "Collection ID is required") })
+    z.object({ collectionId: z.string().min(1, "Collection ID is required") }),
   )
   .handler(async ({ data }) => {
     const docs = await db
@@ -73,7 +73,7 @@ export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
 
 export const getDocumentsByUserId = createServerFn({ method: "GET" })
   .inputValidator(
-    z.object({ userId: z.string().min(1, "User ID is required") })
+    z.object({ userId: z.string().min(1, "User ID is required") }),
   )
   .handler(async ({ data }) => {
     const docs = await db
@@ -89,7 +89,7 @@ export const publishDocument = createServerFn({ method: "POST" })
     z.object({
       id: z.string().min(1, "Document ID is required"),
       published: z.boolean().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const updatedDoc = await db
@@ -109,14 +109,14 @@ export const getPublishedDocuments = createServerFn({ method: "GET" }).handler(
       .where(eq(document.published, true))
       .all();
     return documents;
-  }
+  },
 );
 
 export const getPublishedDocumentById = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       id: z.string().min(1, "Document ID is required"),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const doc = await db
@@ -124,6 +124,26 @@ export const getPublishedDocumentById = createServerFn({ method: "GET" })
       .from(document)
       .where(and(eq(document.id, data.id), eq(document.published, true)))
       .get();
+    return doc;
+  });
+
+export const updateDocumentHtmlContent = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({
+      id: z.string().min(1, "Document ID is required"),
+      htmlContent: z.string().optional(),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const doc = await db
+      .update(document)
+      .set({
+        htmlContent: data.htmlContent,
+      })
+      .where(eq(document.id, data.id))
+      .returning()
+      .get();
+
     return doc;
   });
 

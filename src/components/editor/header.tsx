@@ -31,12 +31,12 @@ export function Header({
   collection,
   document,
   isEditMode,
-  setIsEditMode,
+  editModeChanged,
 }: {
   collection: Collection;
   document: Document;
   isEditMode: boolean;
-  setIsEditMode: (editMode: boolean) => void;
+  editModeChanged: () => void;
 }) {
   const queryClient = useQueryClient();
 
@@ -82,7 +82,7 @@ export function Header({
         {isEditMode ? (
           <Button
             size={"sm"}
-            onClick={() => setIsEditMode(false)}
+            onClick={() => editModeChanged()}
             variant="default"
           >
             Done
@@ -90,7 +90,7 @@ export function Header({
         ) : (
           <Button
             size={"sm"}
-            onClick={() => setIsEditMode(true)}
+            onClick={() => editModeChanged()}
             variant={"outline"}
           >
             Edit

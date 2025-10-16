@@ -36,6 +36,7 @@ export function Editor({
   user,
   isEditMode,
   setIsEditMode,
+  setMdContent,
 }: {
   document: {
     id: string;
@@ -50,6 +51,7 @@ export function Editor({
   user: User;
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;
+  setMdContent: (content: string) => void;
 }) {
   const provider = useHocuspocus(document.id);
 
@@ -57,6 +59,7 @@ export function Editor({
     editable: false,
     onUpdate(props) {
       setIsEditMode(props.editor.isEditable);
+      setMdContent(editor?.getHTML() || "");
     },
     immediatelyRender: false,
     extensions: [

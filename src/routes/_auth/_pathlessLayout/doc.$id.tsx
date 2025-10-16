@@ -3,16 +3,19 @@ import { Header } from "@/components/editor/header";
 import { NotFound } from "@/components/NotFound";
 import { useAuthQueries } from "@/utils/data/auth-queries";
 import { getCollectionByDocIdQuery } from "@/utils/data/collections";
-import { documentByIdQueryOptions } from "@/utils/data/documents";
+import {
+  documentByIdQueryOptions,
+  updateDocumentHtmlContent,
+} from "@/utils/data/documents";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
   component: RouteComponent,
   loader: async ({ context, params }) => {
     const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user()
+      useAuthQueries.user(),
     );
 
     context.queryClient.ensureQueryData(documentByIdQueryOptions(params.id));
@@ -29,14 +32,29 @@ function RouteComponent() {
   const { user } = Route.useLoaderData();
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [htmlContent, setHtmlContent] = useState("");
 
   const { data: document } = useSuspenseQuery(
-    documentByIdQueryOptions(params.id)
+    documentByIdQueryOptions(params.id),
   );
 
   const { data: collection } = useSuspenseQuery(
-    getCollectionByDocIdQuery(params.id)
+    getCollectionByDocIdQuery(params.id),
   );
+
+  const editModeChanged = async () => {
+    setIsEditMode(!isEditMode);
+  };
+
+  useEffect(() => {
+    const save = async () => {
+      const res = updateDocumentHtmlContent({
+        data: { id: params.id, htmlContent: htmlContent },
+      });
+    };
+
+    save().catch(console.error);
+  }, [htmlContent]);
 
   return (
     <div className="w-full flex flex-col items-center py-4">
@@ -44,7 +62,7 @@ function RouteComponent() {
         document={document!}
         collection={collection}
         isEditMode={isEditMode}
-        setIsEditMode={setIsEditMode}
+        editModeChanged={editModeChanged}
       />
       {document ? (
         <div className="max-w-5xl w-full px-4 mt-4">
@@ -55,6 +73,7 @@ function RouteComponent() {
             user={user!}
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
+            setMdContent={setHtmlContent}
           />
         </div>
       ) : (

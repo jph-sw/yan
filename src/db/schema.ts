@@ -16,6 +16,7 @@ export const document = sqliteTable("document", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  htmlContent: text("html_content"),
   collectionId: text("collection_id")
     .notNull()
     .references(() => collection.id, { onDelete: "cascade" }),
