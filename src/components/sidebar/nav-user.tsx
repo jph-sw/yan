@@ -4,7 +4,10 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
+  Moon,
+  SettingsIcon,
   Sparkles,
+  Sun,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,14 +28,27 @@ import {
 } from "@/components/ui/sidebar";
 import { User } from "better-auth";
 import { authClient } from "@/utils/auth-client";
-import { redirect, useNavigate } from "@tanstack/react-router";
+import { Link, redirect, useNavigate } from "@tanstack/react-router";
+import { useTheme } from "../theme-provider";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
+
+  function toggleTheme() {
+    setTheme(theme === "light" ? "dark" : "light");
+  }
 
   return (
     <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild>
+          <Link to="/settings/profile">
+            <SettingsIcon /> Settings
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -70,6 +86,10 @@ export function NavUser({ user }: { user: User }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={toggleTheme}>
+              {theme === "light" ? <Sun /> : <Moon />}
+              {theme === "light" ? "Light Mode" : "Dark Mode"}
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 authClient.signOut();

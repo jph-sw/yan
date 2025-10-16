@@ -3,13 +3,20 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useFieldContext } from "@/utils/form";
 
-export function TextField({ label }: { label: string }) {
+export function TextField({
+  label,
+  disabled,
+}: {
+  label: string;
+  disabled?: boolean;
+}) {
   const field = useFieldContext<string>();
 
   return (
     <Label className="flex flex-col items-start">
       {label}
       <Input
+        disabled={disabled}
         type="text"
         className="mt-1"
         value={field.state.value}

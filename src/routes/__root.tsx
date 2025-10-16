@@ -14,9 +14,10 @@ import { NotFound } from "@/components/NotFound";
 import appCss from "@/styles/app.css?url";
 import { seo } from "@/utils/seo";
 import { collectionsQuery } from "@/utils/data/collections";
-import { ThemeProvider } from "@/utils/theme-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { documentsQueryOptions } from "@/utils/data/documents";
 import { useAuthQueries } from "@/utils/data/auth-queries";
+import { getThemeServerFn } from "@/utils/theme";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -69,7 +70,7 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
   beforeLoad: async ({ context }) => {
     const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user(),
+      useAuthQueries.user()
     );
     return {
       userSession,
@@ -78,6 +79,9 @@ export const Route = createRootRouteWithContext<{
   loader: async ({ context }) => {
     context.queryClient.ensureQueryData(collectionsQuery);
     context.queryClient.ensureQueryData(documentsQueryOptions);
+    const theme = await getThemeServerFn();
+
+    return { theme };
   },
 });
 
@@ -93,20 +97,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const { data: collections } = useSuspenseQuery(collectionsQuery);
   const { data: documents } = useSuspenseQuery(documentsQueryOptions);
 
+  const { theme } = Route.useLoaderData();
+
   return (
-    <html>
+    <html className={theme} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        {/* </ThemeProvider> */}
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
