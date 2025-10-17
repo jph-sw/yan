@@ -1,7 +1,7 @@
+import { useAuthQueries } from "@/utils/data/auth-queries";
 import { getPublishedDocumentByIdQueryOptions } from "@/utils/data/documents";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery";
 
 export const Route = createFileRoute("/p/$id")({
   component: RouteComponent,

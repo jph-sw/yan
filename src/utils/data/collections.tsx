@@ -1,26 +1,30 @@
-import { mutationOptions, queryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "../db";
 import { desc, eq } from "drizzle-orm";
 import { collection, document } from "@/db/schema";
 import z from "zod";
-import { d } from "node_modules/drizzle-kit/index-BAUrj6Ib.mjs";
+import { userRequiredMiddleware } from "../auth-middleware";
 
-export const getCollections = createServerFn({ method: "GET" }).handler(
-  async () => {
+export const getCollections = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
+  .handler(async () => {
     const collections = await db
       .select()
       .from(collection)
       .orderBy(desc(collection.createdAt));
     return collections;
-  }
-);
+  });
 
 export const collectionsQuery = queryOptions({
   queryKey: ["collections"],
   queryFn: async () => {
-    const collections = await getCollections();
-    return collections;
+    try {
+      const collections = await getCollections();
+      return collections;
+    } catch (e) {
+      return [];
+    }
   },
 });
 
@@ -31,7 +35,7 @@ export const createCollection = createServerFn({
     z.object({
       name: z.string().min(1).max(100),
       icon: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const newCollection = await db
@@ -52,7 +56,7 @@ export const getCollectionById = createServerFn({
   .inputValidator(
     z.object({
       collectionId: z.string().min(1),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const collections = await db

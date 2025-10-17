@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ErrorRouteImport } from './routes/error'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PIdRouteImport } from './routes/p.$id'
@@ -28,6 +29,11 @@ import { Route as AuthPathlessLayoutCollectionIdRouteImport } from './routes/_au
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorRoute = ErrorRouteImport.update({
+  id: '/error',
+  path: '/error',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -106,6 +112,7 @@ const AuthPathlessLayoutCollectionIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/p/$id': typeof PIdRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/p/$id': typeof PIdRoute
   '/home': typeof AuthPathlessLayoutHomeRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/_auth/_pathlessLayout': typeof AuthPathlessLayoutRouteRouteWithChildren
   '/p/$id': typeof PIdRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/error'
     | '/login'
     | '/p/$id'
     | '/home'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/error'
     | '/login'
     | '/p/$id'
     | '/home'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
+    | '/error'
     | '/login'
     | '/_auth/_pathlessLayout'
     | '/p/$id'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
+  ErrorRoute: typeof ErrorRoute
   LoginRoute: typeof LoginRoute
   PIdRoute: typeof PIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/error': {
+      id: '/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof ErrorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -376,6 +396,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
+  ErrorRoute: ErrorRoute,
   LoginRoute: LoginRoute,
   PIdRoute: PIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

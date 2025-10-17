@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { auth } from "./auth";
 import { getRequestHeaders } from "@tanstack/react-start/server";
+import z from "zod";
 
 export const getUserSession = createServerFn({
   method: "GET",
@@ -28,3 +29,46 @@ export const getUsers = createServerFn({
   });
   return users;
 });
+
+export const validateDiscordUser = createServerFn({
+  method: "GET",
+})
+  .inputValidator(
+    z.object({
+      accessToken: z.string().min(1, "accessToken is required"),
+      requiredGuildId: z.string().min(1, "requiredGuildId is required"),
+      requiredRoleId: z.string().min(1, "requiredRoleId is required"),
+    }),
+  )
+  .handler(async ({ data }) => {
+    try {
+      const guildsResponse = await fetch(
+        "https://discord.com/api/users/@me/guilds",
+        {
+          headers: { Authorization: `Bearer ${data.accessToken}` },
+        },
+      );
+
+      if (!guildsResponse.ok) return false;
+
+      const guilds = await guildsResponse.json();
+      const isMember = guilds.some((g: any) => g.id === data.requiredGuildId);
+
+      if (!isMember) return false;
+
+      const memberResponse = await fetch(
+        `https://discord.com/api/users/@me/guilds/${data.requiredGuildId}/member`,
+        {
+          headers: { Authorization: `Bearer ${data.accessToken}` },
+        },
+      );
+
+      if (!memberResponse.ok) return false;
+
+      const member = await memberResponse.json();
+      return member.roles?.includes(data.requiredRoleId) || false;
+    } catch (error) {
+      console.error("Discord validation error:", error);
+      return false;
+    }
+  });

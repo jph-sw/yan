@@ -10,13 +10,16 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: documents } = useSuspenseQuery(
-    getPublishedDocumentsQueryOptions
+    getPublishedDocumentsQueryOptions,
   );
 
   return (
     <div className="container mx-auto px-4 py-12 flex justify-center">
       <div className="max-w-4xl w-full">
-        <h1 className="text-2xl font-semibold">Documents</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-semibold">Documents</h1>
+          <Link to="/home">Home</Link>
+        </div>
         <div className="mt-4 space-y-2">
           {documents && documents.length > 0 ? (
             documents.map((doc) => (
