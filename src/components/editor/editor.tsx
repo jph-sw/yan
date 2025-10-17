@@ -4,7 +4,7 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { User } from "better-auth";
-import { useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import {
   Slash,
   SlashCmd,
@@ -20,6 +20,14 @@ import { getRandomColor } from "@/lib/utils";
 import FileHandler from "@tiptap/extension-file-handler";
 import Image from "@tiptap/extension-image";
 import { Document } from "@/utils/types";
+import {
+  getHierarchicalIndexes,
+  TableOfContentData,
+  TableOfContents,
+} from "@tiptap/extension-table-of-contents";
+import { ToC } from "./table-of-contents";
+
+const MemorizedToC = memo(ToC);
 
 function useHocuspocus(documentId: string) {
   return useMemo(
@@ -46,6 +54,9 @@ export function Editor({
   setMdContent: (content: string) => void;
 }) {
   const provider = useHocuspocus(document.id);
+  const [items, setItems] = useState<TableOfContentData>(
+    [] as TableOfContentData,
+  );
 
   const editor = useEditor({
     editable: false,
@@ -130,6 +141,12 @@ export function Editor({
           });
         },
       }),
+      TableOfContents.configure({
+        getIndex: getHierarchicalIndexes,
+        onUpdate(content) {
+          setItems(content);
+        },
+      }),
     ],
     editorProps: {
       handleDOMEvents: {
@@ -147,42 +164,48 @@ export function Editor({
   }, [isEditMode, editor]);
 
   return (
-    <div
-      className="min-w-full prose dark:prose-invert
+    <div className="grid grid-cols-8">
+      <div className="col-span-2" />
+      <div
+        className="col-span-4 min-w-full prose dark:prose-invert
           prose-table:w-full prose-table:outline prose-table:overflow-hidden prose-table:rounded-lg
           prose-thead:bg-muted
           prose-th:h-10 prose-th:px-6 prose-th:[&:not(:last-child)]:border-e prose-th:py-3 prose-th:font-medium prose-th:text-foreground prose-th:border-border
           prose-tr:border-b-2 prose-tr:border-border prose-tr:hover:bg-muted/50 prose-tr:transition-colors
           prose-td:p-4 prose-td:[&:not(:last-child)]:border-e
  prose-td:align-middle [&_td_p]:m-0 [&_th_p]:m-0"
-    >
-      <SlashCmdProvider>
-        <EditorContent editor={editor} />
-        <SlashCmd.Root editor={editor}>
-          <SlashCmd.Cmd className="bg-secondary p-1 rounded-md w-50">
-            <SlashCmd.Empty>No commands available</SlashCmd.Empty>
-            <SlashCmd.List className="max-h-[300px] overflow-y-auto">
-              {suggestions.map((item, index) => {
-                return (
-                  <SlashCmd.Item
-                    value={item.title}
-                    onCommand={(val) => {
-                      item.command(val);
-                    }}
-                    key={item.title}
-                    className="w-full rounded hover:bg-background focus:bg-background data-[selected=true]:bg-background outline-none px-2 py-1 cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2">
-                      {item.icon}
-                      <span className="text-sm">{item.title}</span>
-                    </div>
-                  </SlashCmd.Item>
-                );
-              })}
-            </SlashCmd.List>
-          </SlashCmd.Cmd>
-        </SlashCmd.Root>
-      </SlashCmdProvider>
+      >
+        <SlashCmdProvider>
+          <EditorContent editor={editor} />
+          <SlashCmd.Root editor={editor}>
+            <SlashCmd.Cmd className="bg-secondary p-1 rounded-md w-50">
+              <SlashCmd.Empty>No commands available</SlashCmd.Empty>
+              <SlashCmd.List className="max-h-[300px] overflow-y-auto">
+                {suggestions.map((item, index) => {
+                  return (
+                    <SlashCmd.Item
+                      value={item.title}
+                      onCommand={(val) => {
+                        item.command(val);
+                      }}
+                      key={item.title}
+                      className="w-full rounded hover:bg-background focus:bg-background data-[selected=true]:bg-background outline-none px-2 py-1 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.icon}
+                        <span className="text-sm">{item.title}</span>
+                      </div>
+                    </SlashCmd.Item>
+                  );
+                })}
+              </SlashCmd.List>
+            </SlashCmd.Cmd>
+          </SlashCmd.Root>
+        </SlashCmdProvider>
+      </div>
+      <div className="col-span-2">
+        <MemorizedToC editor={editor} items={items} />
+      </div>
     </div>
   );
 }

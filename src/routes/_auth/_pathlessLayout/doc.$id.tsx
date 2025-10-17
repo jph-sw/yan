@@ -70,8 +70,14 @@ function RouteComponent() {
         isFavorite={isFavorite}
       />
       {document ? (
-        <div className="max-w-5xl w-full px-4 mt-4">
-          <div id="content">{document.title}</div>
+        <div className="w-full px-4 mt-4">
+          <div className="grid grid-cols-8 mb-4">
+            <div className="col-span-2 min-w-full" />
+            <div id="content" className="text-xl col-span-4">
+              {document.title}
+            </div>
+            <div className="col-span-2" />
+          </div>
           <Editor
             key={document.id}
             document={document}

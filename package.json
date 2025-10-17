@@ -51,6 +51,7 @@
     "@tiptap/extension-file-handler": "^3.7.2",
     "@tiptap/extension-image": "^3.7.2",
     "@tiptap/extension-table": "^3.7.2",
+    "@tiptap/extension-table-of-contents": "^3.7.2",
     "@tiptap/extension-typography": "^3.7.2",
     "@tiptap/markdown": "^3.7.2",
     "@tiptap/pm": "^3.7.2",
