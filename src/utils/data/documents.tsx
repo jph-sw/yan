@@ -4,6 +4,7 @@ import { db } from "../db";
 import { document } from "@/db/schema";
 import { queryOptions } from "@tanstack/react-query";
 import { and, eq } from "drizzle-orm";
+import { userRequiredMiddleware } from "../auth-middleware";
 
 const documentObject = z.object({
   id: z.uuid().optional(),
@@ -145,6 +146,27 @@ export const updateDocumentHtmlContent = createServerFn({ method: "POST" })
       .get();
 
     return doc;
+  });
+
+export const updateDocumentCollectionId = createServerFn({
+  method: "POST",
+})
+  .middleware([userRequiredMiddleware])
+  .inputValidator(
+    z.object({
+      docId: z.string().min(1, "docId is required"),
+      collectionId: z.string().min(1, "collectionId is required"),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const res = await db
+      .update(document)
+      .set({ collectionId: data.collectionId })
+      .where(eq(document.id, data.docId))
+      .returning()
+      .get();
+
+    return res;
   });
 
 export const getPublishedDocumentByIdQueryOptions = (id: string) =>

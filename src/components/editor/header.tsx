@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Link } from "@tanstack/react-router";
 import {
+  ArrowRightSquareIcon,
   EllipsisVerticalIcon,
   FileIcon,
   NotebookTextIcon,
@@ -27,6 +28,17 @@ import { cn } from "@/lib/utils";
 import { publishDocument } from "@/utils/data/documents";
 import { useQueryClient } from "@tanstack/react-query";
 import { toggleFavoriteDocument } from "@/utils/data/favorites";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
+import { MoveDocumentForm } from "../forms/move-document-form";
+import { useState } from "react";
 
 export function Header({
   collection,
@@ -42,6 +54,8 @@ export function Header({
   isFavorite: boolean;
 }) {
   const queryClient = useQueryClient();
+
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   const togglePublish = async () => {
     await publishDocument({
@@ -106,42 +120,62 @@ export function Header({
             Edit
           </Button>
         )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size={"sm"} variant={"outline"}>
-              <EllipsisVerticalIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-50">
-            <DropdownMenuLabel>Document</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={async (e) => {
-                e.preventDefault();
-                await toggleFavorite();
+        <Dialog open={moveDialogOpen} onOpenChange={setMoveDialogOpen}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size={"sm"} variant={"outline"}>
+                <EllipsisVerticalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-50">
+              <DropdownMenuLabel>Document</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={async (e) => {
+                  e.preventDefault();
+                  await toggleFavorite();
+                }}
+              >
+                {isFavorite ? "Favorite" : "Favorite"}
+                {isFavorite ? (
+                  <StarIcon
+                    className="ml-auto text-yellow-500"
+                    fill="oklch(79.5% 0.184 86.047)"
+                  />
+                ) : (
+                  <StarIcon className="ml-auto text-yellow-500" />
+                )}
+              </DropdownMenuItem>
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  Move <ArrowRightSquareIcon className="ml-auto" />
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuItem
+                className={cn(document.published && "bg-muted")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  togglePublish();
+                }}
+              >
+                {document.published ? "Unpublish" : "Publish"}
+                <UploadIcon className="ml-auto" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>{" "}
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Move document</DialogTitle>
+              <DialogDescription>Select collection</DialogDescription>
+            </DialogHeader>
+            <MoveDocumentForm
+              document={document}
+              onSubmit={() => {
+                setMoveDialogOpen(false);
+                queryClient.invalidateQueries({ queryKey: ["documents"] });
               }}
-            >
-              {isFavorite ? "Favorite" : "Favorite"}
-              {isFavorite ? (
-                <StarIcon
-                  className="ml-auto text-yellow-500"
-                  fill="oklch(79.5% 0.184 86.047)"
-                />
-              ) : (
-                <StarIcon className="ml-auto text-yellow-500" />
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className={cn(document.published && "bg-muted")}
-              onClick={(e) => {
-                e.preventDefault();
-                togglePublish();
-              }}
-            >
-              {document.published ? "Unpublish" : "Publish"}
-              <UploadIcon className="ml-auto" />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>{" "}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

@@ -15,8 +15,6 @@ import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PIdRouteImport } from './routes/p.$id'
 import { Route as AuthPathlessLayoutRouteRouteImport } from './routes/_auth/_pathlessLayout/route'
-import { Route as ApiSetDocumentIdRouteImport } from './routes/api/set-document.$id'
-import { Route as ApiGetDocumentIdRouteImport } from './routes/api/get-document.$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthPathlessLayoutSettingsRouteImport } from './routes/_auth/_pathlessLayout/settings'
 import { Route as AuthPathlessLayoutHomeRouteImport } from './routes/_auth/_pathlessLayout/home'
@@ -53,16 +51,6 @@ const PIdRoute = PIdRouteImport.update({
 const AuthPathlessLayoutRouteRoute = AuthPathlessLayoutRouteRouteImport.update({
   id: '/_pathlessLayout',
   getParentRoute: () => AuthRoute,
-} as any)
-const ApiSetDocumentIdRoute = ApiSetDocumentIdRouteImport.update({
-  id: '/api/set-document/$id',
-  path: '/api/set-document/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiGetDocumentIdRoute = ApiGetDocumentIdRouteImport.update({
-  id: '/api/get-document/$id',
-  path: '/api/get-document/$id',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -118,8 +106,6 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthPathlessLayoutHomeRoute
   '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
-  '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
   '/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
@@ -134,8 +120,6 @@ export interface FileRoutesByTo {
   '/home': typeof AuthPathlessLayoutHomeRoute
   '/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
-  '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/doc/$id': typeof AuthPathlessLayoutDocIdRoute
   '/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
@@ -153,8 +137,6 @@ export interface FileRoutesById {
   '/_auth/_pathlessLayout/home': typeof AuthPathlessLayoutHomeRoute
   '/_auth/_pathlessLayout/settings': typeof AuthPathlessLayoutSettingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/get-document/$id': typeof ApiGetDocumentIdRoute
-  '/api/set-document/$id': typeof ApiSetDocumentIdRoute
   '/_auth/_pathlessLayout/collection/$id': typeof AuthPathlessLayoutCollectionIdRoute
   '/_auth/_pathlessLayout/doc/$id': typeof AuthPathlessLayoutDocIdRoute
   '/_auth/_pathlessLayout/settings/general': typeof AuthPathlessLayoutSettingsGeneralRoute
@@ -171,8 +153,6 @@ export interface FileRouteTypes {
     | '/home'
     | '/settings'
     | '/api/auth/$'
-    | '/api/get-document/$id'
-    | '/api/set-document/$id'
     | '/collection/$id'
     | '/doc/$id'
     | '/settings/general'
@@ -187,8 +167,6 @@ export interface FileRouteTypes {
     | '/home'
     | '/settings'
     | '/api/auth/$'
-    | '/api/get-document/$id'
-    | '/api/set-document/$id'
     | '/collection/$id'
     | '/doc/$id'
     | '/settings/general'
@@ -205,8 +183,6 @@ export interface FileRouteTypes {
     | '/_auth/_pathlessLayout/home'
     | '/_auth/_pathlessLayout/settings'
     | '/api/auth/$'
-    | '/api/get-document/$id'
-    | '/api/set-document/$id'
     | '/_auth/_pathlessLayout/collection/$id'
     | '/_auth/_pathlessLayout/doc/$id'
     | '/_auth/_pathlessLayout/settings/general'
@@ -221,8 +197,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PIdRoute: typeof PIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  ApiGetDocumentIdRoute: typeof ApiGetDocumentIdRoute
-  ApiSetDocumentIdRoute: typeof ApiSetDocumentIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -268,20 +242,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthPathlessLayoutRouteRouteImport
       parentRoute: typeof AuthRoute
-    }
-    '/api/set-document/$id': {
-      id: '/api/set-document/$id'
-      path: '/api/set-document/$id'
-      fullPath: '/api/set-document/$id'
-      preLoaderRoute: typeof ApiSetDocumentIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/get-document/$id': {
-      id: '/api/get-document/$id'
-      path: '/api/get-document/$id'
-      fullPath: '/api/get-document/$id'
-      preLoaderRoute: typeof ApiGetDocumentIdRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -400,8 +360,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PIdRoute: PIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  ApiGetDocumentIdRoute: ApiGetDocumentIdRoute,
-  ApiSetDocumentIdRoute: ApiSetDocumentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
