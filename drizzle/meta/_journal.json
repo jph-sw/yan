@@ -29,6 +29,13 @@
       "when": 1760700741505,
       "tag": "0003_regular_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1760726554704,
+      "tag": "0004_dear_scrambler",
+      "breakpoints": true
     }
   ]
 }
