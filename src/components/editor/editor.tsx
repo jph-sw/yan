@@ -148,7 +148,7 @@ export function Editor({
 
   return (
     <div
-      className="prose dark:prose-invert
+      className="min-w-full prose dark:prose-invert
           prose-table:w-full prose-table:outline prose-table:overflow-hidden prose-table:rounded-lg
           prose-thead:bg-muted
           prose-th:h-10 prose-th:px-6 prose-th:[&:not(:last-child)]:border-e prose-th:py-3 prose-th:font-medium prose-th:text-foreground prose-th:border-border
