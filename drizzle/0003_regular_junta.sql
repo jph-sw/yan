@@ -1,0 +1,1 @@
+ALTER TABLE `document` ADD `html_content` text;

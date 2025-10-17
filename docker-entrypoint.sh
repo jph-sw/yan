@@ -1,6 +1,8 @@
 #!/bin/sh
 # docker-entrypoint.sh
 
+set -e
+
 # Ensure data directory exists (for local file mode)
 mkdir -p /app/data
 
@@ -8,21 +10,52 @@ mkdir -p /app/data
 if [ -z "$DATABASE_URL" ] || echo "$DATABASE_URL" | grep -q "^file:"; then
     # Extract the filename from DATABASE_URL or use default
     DB_FILE=${DATABASE_URL#file:} # Remove "file:" prefix if present
-    DB_FILE=${DB_FILE:-./data/local.db} # Use default if not set
+    DB_FILE=${DB_FILE:-data/local.db} # Use default if not set
 
     # Remove leading ./ if present
     DB_FILE=${DB_FILE#./}
 
-    # Ensure absolute path
+    # Ensure it doesn't start with / (make it relative to /app)
+    DB_FILE=${DB_FILE#/}
+
+    # Create full path
     FULL_PATH="/app/$DB_FILE"
 
     # Create parent directory if it doesn't exist
     mkdir -p "$(dirname "$FULL_PATH")"
     touch "$FULL_PATH"
+
+    # Set proper permissions
+    chmod 664 "$FULL_PATH"
+    chown bun:bun "$FULL_PATH"
+
+    echo "Database file initialized at: $FULL_PATH"
 fi
 
-# Run migrations
-bun run dist/migrate.js
+# Run migrations with proper error handling
+echo "Running database migrations..."
+if ! bun run dist/migrate.js; then
+    echo "Migration failed! Exiting..."
+    exit 1
+fi
 
-# Start the application
-exec bun dist/server.js
+# Function to handle graceful shutdown
+shutdown_handler() {
+    echo "Received shutdown signal, stopping processes..."
+    if [ -n "$SERVER_PID" ]; then
+        kill -TERM "$SERVER_PID" 2>/dev/null || true
+        wait "$SERVER_PID" 2>/dev/null || true
+    fi
+    exit 0
+}
+
+# Set up signal handlers for POSIX-compliant shells
+trap shutdown_handler INT TERM
+
+# Start the main server in the background
+echo "Starting main server..."
+bun dist/server.js &
+SERVER_PID=$!
+
+# Wait for the server process
+wait "$SERVER_PID"

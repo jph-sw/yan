@@ -22,6 +22,13 @@
       "when": 1760630251377,
       "tag": "0002_spotty_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1760700741505,
+      "tag": "0003_regular_junta",
+      "breakpoints": true
     }
   ]
 }
