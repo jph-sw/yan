@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text, integer, blob } from "drizzle-orm/sqlite-core";
 
-export const documentEdits = sqliteTable("document_edits", {
+export const favorite = sqliteTable("favorite", {
   id: text("id").primaryKey(),
   documentId: text("document_id")
     .notNull()
@@ -9,7 +9,9 @@ export const documentEdits = sqliteTable("document_edits", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .notNull(),
 });
 
 export const document = sqliteTable("document", {

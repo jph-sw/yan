@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { getRandomColor } from "@/lib/utils";
 import FileHandler from "@tiptap/extension-file-handler";
 import Image from "@tiptap/extension-image";
+import { Document } from "@/utils/types";
 
 function useHocuspocus(documentId: string) {
   return useMemo(
@@ -38,16 +39,7 @@ export function Editor({
   setIsEditMode,
   setMdContent,
 }: {
-  document: {
-    id: string;
-    title: string;
-    content: string;
-    collectionId: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-    createdBy: string | null;
-    updatedBy: string | null;
-  };
+  document: Document;
   user: User;
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;

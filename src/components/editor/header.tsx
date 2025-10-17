@@ -11,6 +11,7 @@ import {
   EllipsisVerticalIcon,
   FileIcon,
   NotebookTextIcon,
+  StarIcon,
   UploadIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -20,23 +21,25 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { publishDocument } from "@/utils/data/documents";
 import { useQueryClient } from "@tanstack/react-query";
+import { toggleFavoriteDocument } from "@/utils/data/favorites";
 
 export function Header({
   collection,
   document,
   isEditMode,
   editModeChanged,
+  isFavorite,
 }: {
   collection: Collection;
   document: Document;
   isEditMode: boolean;
   editModeChanged: () => void;
+  isFavorite: boolean;
 }) {
   const queryClient = useQueryClient();
 
@@ -45,6 +48,13 @@ export function Header({
       data: { id: document.id, published: !document.published },
     });
     queryClient.invalidateQueries({ queryKey: ["document", document.id] });
+  };
+
+  const toggleFavorite = async () => {
+    await toggleFavoriteDocument({
+      data: { documentId: document.id },
+    });
+    queryClient.invalidateQueries({ queryKey: ["isFavorite", document.id] });
   };
 
   return (
@@ -104,6 +114,22 @@ export function Header({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-50">
             <DropdownMenuLabel>Document</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={async (e) => {
+                e.preventDefault();
+                await toggleFavorite();
+              }}
+            >
+              {isFavorite ? "Favorite" : "Favorite"}
+              {isFavorite ? (
+                <StarIcon
+                  className="ml-auto text-yellow-500"
+                  fill="oklch(79.5% 0.184 86.047)"
+                />
+              ) : (
+                <StarIcon className="ml-auto text-yellow-500" />
+              )}
+            </DropdownMenuItem>
             <DropdownMenuItem
               className={cn(document.published && "bg-muted")}
               onClick={(e) => {

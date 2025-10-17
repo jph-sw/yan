@@ -7,6 +7,7 @@ import {
   documentByIdQueryOptions,
   updateDocumentHtmlContent,
 } from "@/utils/data/documents";
+import { isFavoriteQuery } from "@/utils/data/favorites";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
 
     context.queryClient.ensureQueryData(documentByIdQueryOptions(params.id));
     context.queryClient.ensureQueryData(getCollectionByDocIdQuery(params.id));
+    context.queryClient.ensureQueryData(isFavoriteQuery(params.id));
 
     return {
       user: userSession?.user,
@@ -42,6 +44,8 @@ function RouteComponent() {
     getCollectionByDocIdQuery(params.id),
   );
 
+  const { data: isFavorite } = useSuspenseQuery(isFavoriteQuery(params.id));
+
   const editModeChanged = async () => {
     setIsEditMode(!isEditMode);
   };
@@ -63,6 +67,7 @@ function RouteComponent() {
         collection={collection}
         isEditMode={isEditMode}
         editModeChanged={editModeChanged}
+        isFavorite={isFavorite}
       />
       {document ? (
         <div className="max-w-5xl w-full px-4 mt-4">
