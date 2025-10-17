@@ -19,9 +19,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "file:/app/data/local.db"  # ← Changed to use volume path
+      DATABASE_URL: "file:/app/data/local.db" 
       BETTER_AUTH_SECRET: "blbabla"
       BETTER_AUTH_URL: "http://localhost:3000"
+      WS_URL: "ws://0.0.0.0:1234"
+      DISCORD_CLIENT_ID: 
+      DISCORD_CLIENT_SECRET: 
+      REQUIRED_GUILD_ID: 
+      REQUIRED_ROLE_ID: 
     volumes:
       - yan-data:/app/data
     restart: unless-stopped
