@@ -15,7 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { ChevronRight, LucideIcon, LucideProps, PlusIcon } from "lucide-react";
+import { ChevronRight, MinusIcon, PlusIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -62,7 +62,9 @@ export function NavMain({
   user: User;
 }) {
   const queryClient = useQueryClient();
-  const [isCreatingNewDocument, setIsCreatingNewDocument] = useState(false);
+  const [isCreatingNewDocument, setIsCreatingNewDocument] = useState<
+    Record<string, boolean>
+  >({});
   const [isCreatingNewCollection, setIsCreatingNewCollection] = useState(false);
   const [openStates, setOpenStates] = useState<Record<string, boolean>>({});
 
@@ -117,15 +119,29 @@ export function NavMain({
               <div className="absolute top-1.5 right-8 flex items-center">
                 <button
                   onClick={() => {
-                    setIsCreatingNewDocument(true);
-                    setOpenStates((prev) => ({
-                      ...prev,
-                      [collection.id]: true,
-                    }));
+                    if (isCreatingNewDocument[collection.id]) {
+                      setIsCreatingNewDocument((prev) => ({
+                        ...prev,
+                        [collection.id]: false,
+                      }));
+                    } else {
+                      setIsCreatingNewDocument((prev) => ({
+                        ...prev,
+                        [collection.id]: true,
+                      }));
+                      setOpenStates((prev) => ({
+                        ...prev,
+                        [collection.id]: true,
+                      }));
+                    }
                   }}
                   className="flex aspect-square w-5 items-center justify-center rounded-md p-0 hover:bg-sidebar-accent"
                 >
-                  <PlusIcon className="size-4" />
+                  {isCreatingNewDocument[collection.id] ? (
+                    <MinusIcon className="size-4" />
+                  ) : (
+                    <PlusIcon className="size-4" />
+                  )}
                 </button>
               </div>
               <CollapsibleTrigger asChild>
@@ -136,13 +152,16 @@ export function NavMain({
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {isCreatingNewDocument && (
+                  {isCreatingNewDocument[collection.id] && (
                     <SidebarMenuSubItem key={"new_item"}>
                       <form
                         onSubmit={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setIsCreatingNewDocument(false);
+                          setIsCreatingNewDocument((prev) => ({
+                            ...prev,
+                            [collection.id]: false,
+                          }));
                           createDocumentMutation.mutate({
                             title: (e.target as any).title.value,
                             collectionId: collection.id,
