@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { CreateCollectionForm } from "./create-collection-form";
@@ -185,10 +186,12 @@ export function NavMain({
             </SidebarMenuItem>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader>New collection</DialogHeader>
-            <DialogDescription>
-              Here you can create a new content collection
-            </DialogDescription>
+            <DialogHeader>
+              <DialogTitle>New collection</DialogTitle>
+              <DialogDescription>
+                Here you can create a new content collection
+              </DialogDescription>
+            </DialogHeader>
             <CreateCollectionForm
               closeDialog={() => setIsCreatingNewCollection(false)}
             />
