@@ -18,6 +18,7 @@ const documentObject = z.object({
 });
 
 export const createDocument = createServerFn({ method: "POST" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(documentObject)
   .handler(async ({ data }) => {
     const newDocument = await db
@@ -37,14 +38,15 @@ export const createDocument = createServerFn({ method: "POST" })
     return newDocument;
   });
 
-export const getDocuments = createServerFn({ method: "GET" }).handler(
-  async () => {
+export const getDocuments = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
+  .handler(async () => {
     const documents = await db.select().from(document).all();
     return documents;
-  },
-);
+  });
 
 export const getDocumentById = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({
       id: z.string().min(1, "Document ID is required"),
@@ -60,6 +62,7 @@ export const getDocumentById = createServerFn({ method: "GET" })
   });
 
 export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({ collectionId: z.string().min(1, "Collection ID is required") }),
   )
@@ -73,6 +76,7 @@ export const getDocumentsByCollectionId = createServerFn({ method: "GET" })
   });
 
 export const getDocumentsByUserId = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({ userId: z.string().min(1, "User ID is required") }),
   )
@@ -86,6 +90,7 @@ export const getDocumentsByUserId = createServerFn({ method: "GET" })
   });
 
 export const publishDocument = createServerFn({ method: "POST" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({
       id: z.string().min(1, "Document ID is required"),

@@ -7,6 +7,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { userRequiredMiddleware } from "../auth-middleware";
 
 export const getFavorites = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(z.object({ userId: z.string().min(1, "userId is required") }))
   .handler(async ({ data }) => {
     const favoriteDocuments = await db

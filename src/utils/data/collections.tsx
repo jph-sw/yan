@@ -31,6 +31,7 @@ export const collectionsQuery = queryOptions({
 export const createCollection = createServerFn({
   method: "POST",
 })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({
       name: z.string().min(1).max(100),
@@ -53,6 +54,7 @@ export const createCollection = createServerFn({
 export const getCollectionById = createServerFn({
   method: "GET",
 })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({
       collectionId: z.string().min(1),
@@ -67,6 +69,7 @@ export const getCollectionById = createServerFn({
   });
 
 export const getCollectionByDocId = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(z.object({ documentId: z.string().min(1) }))
   .handler(async ({ data }) => {
     const docs = await db
