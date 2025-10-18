@@ -9,6 +9,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRightSquareIcon,
+  DeleteIcon,
   EllipsisVerticalIcon,
   FileIcon,
   NotebookTextIcon,
@@ -20,25 +21,19 @@ import { Collection, Document } from "@/utils/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { publishDocument } from "@/utils/data/documents";
 import { useQueryClient } from "@tanstack/react-query";
 import { toggleFavoriteDocument } from "@/utils/data/favorites";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { ScrollArea } from "../ui/scroll-area";
-import { MoveDocumentForm } from "../forms/move-document-form";
 import { useState } from "react";
+import { DocumentDeleteDialog } from "./document-delete-dialog";
+import { DocumentMoveDialog } from "./document-move-dialog";
 
 export function Header({
   collection,
@@ -55,7 +50,9 @@ export function Header({
 }) {
   const queryClient = useQueryClient();
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const togglePublish = async () => {
     await publishDocument({
@@ -120,15 +117,15 @@ export function Header({
             Edit
           </Button>
         )}
-        <Dialog open={moveDialogOpen} onOpenChange={setMoveDialogOpen}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"sm"} variant={"outline"}>
-                <EllipsisVerticalIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-50">
-              <DropdownMenuLabel>Document</DropdownMenuLabel>
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button size={"sm"} variant={"outline"}>
+              <EllipsisVerticalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-50">
+            <DropdownMenuLabel>Document</DropdownMenuLabel>
+            <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={async (e) => {
                   e.preventDefault();
@@ -145,11 +142,19 @@ export function Header({
                   <StarIcon className="ml-auto text-yellow-500" />
                 )}
               </DropdownMenuItem>
-              <DialogTrigger asChild>
-                <DropdownMenuItem>
+              <DocumentMoveDialog
+                open={moveDialogOpen}
+                onOpenChange={() => setMoveDialogOpen(!moveDialogOpen)}
+                document={document}
+                onSubmit={() => {
+                  setMoveDialogOpen(false);
+                  queryClient.invalidateQueries({ queryKey: ["documents"] });
+                }}
+              >
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   Move <ArrowRightSquareIcon className="ml-auto" />
                 </DropdownMenuItem>
-              </DialogTrigger>
+              </DocumentMoveDialog>
               <DropdownMenuItem
                 className={cn(document.published && "bg-muted")}
                 onClick={(e) => {
@@ -160,22 +165,24 @@ export function Header({
                 {document.published ? "Unpublish" : "Publish"}
                 <UploadIcon className="ml-auto" />
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>{" "}
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Move document</DialogTitle>
-              <DialogDescription>Select collection</DialogDescription>
-            </DialogHeader>
-            <MoveDocumentForm
-              document={document}
-              onSubmit={() => {
-                setMoveDialogOpen(false);
-                queryClient.invalidateQueries({ queryKey: ["documents"] });
-              }}
-            />
-          </DialogContent>
-        </Dialog>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DocumentDeleteDialog
+                open={deleteDialogOpen}
+                onOpenChange={() => setDeleteDialogOpen(!deleteDialogOpen)}
+                document={document}
+              >
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  Delete <DeleteIcon className="ml-auto" />
+                </DropdownMenuItem>
+              </DocumentDeleteDialog>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>{" "}
       </div>
     </div>
   );

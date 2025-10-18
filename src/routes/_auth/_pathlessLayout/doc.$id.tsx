@@ -37,7 +37,6 @@ function RouteComponent() {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
-  const [title, setTitle] = useState("");
 
   const { data: document } = useSuspenseQuery(
     documentByIdQueryOptions(params.id),
@@ -52,7 +51,7 @@ function RouteComponent() {
   const editModeChanged = async () => {
     setIsEditMode(!isEditMode);
     await updateDocument({
-      data: { id: params.id, htmlContent, title },
+      data: { id: params.id, htmlContent },
     });
 
     queryClient.invalidateQueries({ queryKey: ["document"] });
@@ -73,15 +72,7 @@ function RouteComponent() {
           <div className="grid grid-cols-8 mb-4">
             <div className="col-span-2 min-w-full" />
             <div id="content" className="text-xl col-span-4">
-              {isEditMode ? (
-                <input
-                  defaultValue={document.title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-50 text-xl focus:outline-none"
-                />
-              ) : (
-                document.title
-              )}
+              {document.title}
             </div>
             <div className="col-span-2" />
           </div>

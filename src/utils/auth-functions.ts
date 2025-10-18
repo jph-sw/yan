@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { auth } from "./auth";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import z from "zod";
+import { statementSchema } from "./permissions";
+import { userRequiredMiddleware } from "./auth-middleware";
 
 export const getUserSession = createServerFn({
   method: "GET",
@@ -69,6 +71,32 @@ export const validateDiscordUser = createServerFn({
       return member.roles?.includes(data.requiredRoleId) || false;
     } catch (error) {
       console.error("Discord validation error:", error);
+      return false;
+    }
+  });
+
+export const hasPermissions = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({
+      ...statementSchema.shape,
+      userId: z.string(),
+      role: z.string(),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const { userId, role, ...permissions } = data;
+
+    const res = await auth.api.userHasPermission({
+      body: {
+        userId,
+        role: role as "user" | "admin" | undefined,
+        permissions,
+      },
+    });
+
+    if (res.success) {
+      return true;
+    } else {
       return false;
     }
   });

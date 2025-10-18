@@ -60,4 +60,7 @@ export const errors = {
   CASCADING_ERROR: {
     message: "A cascading error occured",
   },
+  UNAUTHORIZED: {
+    message: "Insufficent permissions",
+  },
 };

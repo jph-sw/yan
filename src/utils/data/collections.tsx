@@ -5,6 +5,7 @@ import { desc, eq } from "drizzle-orm";
 import { collection, document } from "@/db/schema";
 import z from "zod";
 import { userRequiredMiddleware } from "../auth-middleware";
+import { hasPermissions } from "../auth-functions";
 
 export const getCollections = createServerFn({ method: "GET" })
   .middleware([userRequiredMiddleware])
@@ -54,18 +55,31 @@ export const createCollection = createServerFn({
 export const deleteCollection = createServerFn({
   method: "POST",
 })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
     z.object({ id: z.string().min(1, "Collection Id is required") }),
   )
-  .handler(async ({ data }) => {
-    try {
-      await db.delete(document).where(eq(document.collectionId, data.id));
-      await db.delete(collection).where(eq(collection.id, data.id));
-    } catch (error) {
-      if (isDatabaseError(error)) {
-        console.log(error);
-        return errors.CASCADING_ERROR;
+  .handler(async ({ data, context }) => {
+    const hasPermission = await hasPermissions({
+      data: {
+        collection: ["delete"],
+        userId: context.userSession.user.id,
+        role: context.userSession.user.role!,
+      },
+    });
+
+    if (hasPermission) {
+      try {
+        await db.delete(document).where(eq(document.collectionId, data.id));
+        await db.delete(collection).where(eq(collection.id, data.id));
+      } catch (error) {
+        if (isDatabaseError(error)) {
+          console.log(error);
+          return errors.CASCADING_ERROR;
+        }
       }
+    } else {
+      return errors.UNAUTHORIZED;
     }
   });
 

@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import z from "zod";
-import { db } from "../db";
+import { db, errors, isDatabaseError } from "../db";
 import { document } from "@/db/schema";
 import { queryOptions } from "@tanstack/react-query";
 import { and, eq } from "drizzle-orm";
@@ -172,6 +172,19 @@ export const updateDocument = createServerFn({ method: "POST" })
       .get();
 
     return doc;
+  });
+
+export const deleteDocument = createServerFn({ method: "POST" })
+  .middleware([userRequiredMiddleware])
+  .inputValidator(z.object({ id: z.string().min(1, "id is required") }))
+  .handler(async ({ data }) => {
+    try {
+      await db.delete(document).where(eq(document.id, data.id));
+    } catch (error) {
+      if (isDatabaseError(error)) {
+        return errors.CASCADING_ERROR;
+      }
+    }
   });
 
 export const getPublishedDocumentByIdQueryOptions = (id: string) =>

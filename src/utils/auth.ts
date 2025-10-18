@@ -2,11 +2,12 @@ import { betterAuth } from "better-auth";
 import { db } from "./db";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as schema from "@/db/schema";
-import { admin } from "better-auth/plugins/admin";
+import { admin as adminPlugin } from "better-auth/plugins/admin";
 import { createAuthMiddleware } from "better-auth/api";
 import { account } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { validateDiscordUser } from "./auth-functions";
+import { admin, user, ac } from "./permissions";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -62,5 +63,13 @@ export const auth = betterAuth({
     },
   },
 
-  plugins: [admin()],
+  plugins: [
+    adminPlugin({
+      ac,
+      roles: {
+        admin,
+        user,
+      },
+    }),
+  ],
 });
