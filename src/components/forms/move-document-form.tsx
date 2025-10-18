@@ -7,7 +7,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { Button } from "../ui/button";
-import { updateDocumentCollectionId } from "@/utils/data/documents";
+import { updateDocument } from "@/utils/data/documents";
 
 export function MoveDocumentForm({
   document,
@@ -24,8 +24,8 @@ export function MoveDocumentForm({
     defaultValues: document,
     onSubmit: async () => {
       if (selectedCollection) {
-        await updateDocumentCollectionId({
-          data: { docId: document.id, collectionId: selectedCollection.id },
+        await updateDocument({
+          data: { id: document.id, collectionId: selectedCollection.id },
         });
         onSubmit();
       }

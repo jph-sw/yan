@@ -5,12 +5,12 @@ import { useAuthQueries } from "@/utils/data/auth-queries";
 import { getCollectionByDocIdQuery } from "@/utils/data/collections";
 import {
   documentByIdQueryOptions,
-  updateDocumentHtmlContent,
+  updateDocument,
 } from "@/utils/data/documents";
 import { isFavoriteQuery } from "@/utils/data/favorites";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
   component: RouteComponent,
@@ -33,8 +33,11 @@ function RouteComponent() {
   const params = Route.useParams();
   const { user } = Route.useLoaderData();
 
+  const queryClient = useQueryClient();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const { data: document } = useSuspenseQuery(
     documentByIdQueryOptions(params.id),
@@ -48,17 +51,13 @@ function RouteComponent() {
 
   const editModeChanged = async () => {
     setIsEditMode(!isEditMode);
+    await updateDocument({
+      data: { id: params.id, htmlContent, title },
+    });
+
+    queryClient.invalidateQueries({ queryKey: ["document"] });
+    queryClient.invalidateQueries({ queryKey: ["documents"] });
   };
-
-  useEffect(() => {
-    const save = async () => {
-      const res = updateDocumentHtmlContent({
-        data: { id: params.id, htmlContent: htmlContent },
-      });
-    };
-
-    save().catch(console.error);
-  }, [htmlContent]);
 
   return (
     <div className="w-full flex flex-col items-center py-4">
@@ -74,7 +73,15 @@ function RouteComponent() {
           <div className="grid grid-cols-8 mb-4">
             <div className="col-span-2 min-w-full" />
             <div id="content" className="text-xl col-span-4">
-              {document.title}
+              {isEditMode ? (
+                <input
+                  defaultValue={document.title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-50 text-xl focus:outline-none"
+                />
+              ) : (
+                document.title
+              )}
             </div>
             <div className="col-span-2" />
           </div>

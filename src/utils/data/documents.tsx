@@ -128,45 +128,45 @@ export const getPublishedDocumentById = createServerFn({ method: "GET" })
     return doc;
   });
 
-export const updateDocumentHtmlContent = createServerFn({ method: "POST" })
+export const updateDocument = createServerFn({ method: "POST" })
+  .middleware([userRequiredMiddleware])
   .inputValidator(
-    z.object({
-      id: z.string().min(1, "Document ID is required"),
-      htmlContent: z.string().optional(),
-    }),
+    z
+      .object({
+        id: z.string().min(1, "Document ID is required"),
+        htmlContent: z.string().optional(),
+        collectionId: z.string().optional(),
+        title: z.string().optional(),
+      })
+      .refine(
+        (data) =>
+          data.htmlContent !== undefined ||
+          data.collectionId !== undefined ||
+          data.title !== undefined,
+        { message: "At least one field to update must be provided" },
+      ),
   )
   .handler(async ({ data }) => {
+    const updates: any = {};
+
+    if (data.htmlContent !== undefined) {
+      updates.htmlContent = data.htmlContent;
+    }
+    if (data.collectionId !== undefined) {
+      updates.collectionId = data.collectionId;
+    }
+    if (data.title !== undefined) {
+      updates.title = data.title;
+    }
+
     const doc = await db
       .update(document)
-      .set({
-        htmlContent: data.htmlContent,
-      })
+      .set(updates)
       .where(eq(document.id, data.id))
       .returning()
       .get();
 
     return doc;
-  });
-
-export const updateDocumentCollectionId = createServerFn({
-  method: "POST",
-})
-  .middleware([userRequiredMiddleware])
-  .inputValidator(
-    z.object({
-      docId: z.string().min(1, "docId is required"),
-      collectionId: z.string().min(1, "collectionId is required"),
-    }),
-  )
-  .handler(async ({ data }) => {
-    const res = await db
-      .update(document)
-      .set({ collectionId: data.collectionId })
-      .where(eq(document.id, data.docId))
-      .returning()
-      .get();
-
-    return res;
   });
 
 export const getPublishedDocumentByIdQueryOptions = (id: string) =>
