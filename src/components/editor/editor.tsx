@@ -1,16 +1,10 @@
-import { useEditor, EditorContent, useEditorState } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { User } from "better-auth";
-import { memo, useEffect, useMemo, useState } from "react";
-import {
-  Slash,
-  SlashCmd,
-  SlashCmdProvider,
-  enableKeyboardNavigation,
-} from "@harshtalks/slash-tiptap";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Placeholder } from "@tiptap/extensions";
 import { TableKit } from "@tiptap/extension-table";
 import { Markdown } from "@tiptap/markdown";
@@ -45,18 +39,26 @@ export function Editor({
   user,
   isEditMode,
   setIsEditMode,
+  editModeChanged,
   setMdContent,
 }: {
   document: Document;
   user: User;
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;
+  editModeChanged: () => void;
   setMdContent: (content: string) => void;
 }) {
   const provider = useHocuspocus(document.id);
   const [items, setItems] = useState<TableOfContentData>(
     [] as TableOfContentData,
   );
+
+  const editModeChangedRef = useRef(editModeChanged);
+
+  useEffect(() => {
+    editModeChangedRef.current = editModeChanged;
+  }, [editModeChanged]);
 
   const editor = useEditor({
     editable: false,
@@ -66,7 +68,16 @@ export function Editor({
     },
     immediatelyRender: false,
     extensions: [
-      Markdown,
+      Markdown.extend({
+        addKeyboardShortcuts() {
+          return {
+            "Mod-s": () => {
+              editModeChangedRef.current();
+              return true;
+            },
+          };
+        },
+      }),
       Image,
       Commands.configure({
         slashSuggestion,
@@ -146,11 +157,6 @@ export function Editor({
         },
       }),
     ],
-    editorProps: {
-      handleDOMEvents: {
-        keydown: (_, v) => enableKeyboardNavigation(v),
-      },
-    },
   });
 
   useEffect(() => {

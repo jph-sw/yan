@@ -91,8 +91,10 @@ function RouteComponent() {
             user={user!}
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
+            editModeChanged={editModeChanged}
             setMdContent={setHtmlContent}
           />
+          <div className="col-span-2" />
         </div>
       ) : (
         <NotFound />
