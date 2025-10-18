@@ -29,7 +29,7 @@ import {
 import { User } from "better-auth";
 import { authClient } from "@/utils/auth-client";
 import { Link, redirect, useNavigate } from "@tanstack/react-router";
-import { useTheme } from "../theme-provider";
+import { useTheme } from "@/hooks/use-theme";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();

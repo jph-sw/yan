@@ -11,11 +11,9 @@ import {
   SlashCmdProvider,
   enableKeyboardNavigation,
 } from "@harshtalks/slash-tiptap";
-import { suggestions } from "./slash-command";
 import { Placeholder } from "@tiptap/extensions";
 import { TableKit } from "@tiptap/extension-table";
 import { Markdown } from "@tiptap/markdown";
-import { Button } from "../ui/button";
 import { getRandomColor } from "@/lib/utils";
 import FileHandler from "@tiptap/extension-file-handler";
 import Image from "@tiptap/extension-image";
@@ -26,6 +24,8 @@ import {
   TableOfContents,
 } from "@tiptap/extension-table-of-contents";
 import { ToC } from "./table-of-contents";
+import Commands from "./slash-command";
+import slashSuggestion from "./slash-suggestion";
 
 const MemorizedToC = memo(ToC);
 
@@ -68,10 +68,8 @@ export function Editor({
     extensions: [
       Markdown,
       Image,
-      Slash.configure({
-        suggestion: {
-          items: () => suggestions,
-        },
+      Commands.configure({
+        slashSuggestion,
       }),
       TableKit.configure({
         table: { resizable: true },
@@ -175,33 +173,7 @@ export function Editor({
           prose-td:p-4 prose-td:[&:not(:last-child)]:border-e
  prose-td:align-middle [&_td_p]:m-0 [&_th_p]:m-0"
       >
-        <SlashCmdProvider>
-          <EditorContent editor={editor} />
-          <SlashCmd.Root editor={editor}>
-            <SlashCmd.Cmd className="bg-secondary p-1 rounded-md w-50">
-              <SlashCmd.Empty>No commands available</SlashCmd.Empty>
-              <SlashCmd.List className="max-h-[300px] overflow-y-auto">
-                {suggestions.map((item, index) => {
-                  return (
-                    <SlashCmd.Item
-                      value={item.title}
-                      onCommand={(val) => {
-                        item.command(val);
-                      }}
-                      key={item.title}
-                      className="w-full rounded hover:bg-background focus:bg-background data-[selected=true]:bg-background outline-none px-2 py-1 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2">
-                        {item.icon}
-                        <span className="text-sm">{item.title}</span>
-                      </div>
-                    </SlashCmd.Item>
-                  );
-                })}
-              </SlashCmd.List>
-            </SlashCmd.Cmd>
-          </SlashCmd.Root>
-        </SlashCmdProvider>
+        <EditorContent editor={editor} />
       </div>
       <div className="col-span-2">
         <MemorizedToC editor={editor} items={items} />

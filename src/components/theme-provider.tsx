@@ -1,11 +1,11 @@
 import { useRouter } from "@tanstack/react-router";
-import { createContext, type PropsWithChildren, use } from "react";
+import { createContext, type PropsWithChildren, useContext } from "react";
 import { setThemeServerFn, type T as Theme } from "@/utils/theme";
 
 type ThemeContextVal = { theme: Theme; setTheme: (val: Theme) => void };
 type Props = PropsWithChildren<{ theme: Theme }>;
 
-const ThemeContext = createContext<ThemeContextVal | null>(null);
+export const ThemeContext = createContext<ThemeContextVal | null>(null);
 
 export function ThemeProvider({ children, theme }: Props) {
   const router = useRouter();
@@ -15,10 +15,4 @@ export function ThemeProvider({ children, theme }: Props) {
   }
 
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
-}
-
-export function useTheme() {
-  const val = use(ThemeContext);
-  if (!val) throw new Error("useTheme called outside of ThemeProvider!");
-  return val;
 }
