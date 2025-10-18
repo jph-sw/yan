@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { useAuthQueries } from "@/utils/data/auth-queries";
 import { collectionsQuery } from "@/utils/data/collections";
 import { documentsQueryOptions } from "@/utils/data/documents";
@@ -37,6 +38,7 @@ function RouteComponent() {
       />
       <main className="flex h-full flex-1 flex-col">
         <Outlet />
+        <Toaster />
       </main>
     </SidebarProvider>
   );

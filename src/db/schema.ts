@@ -5,7 +5,7 @@ export const favorite = sqliteTable("favorite", {
   id: text("id").primaryKey(),
   documentId: text("document_id")
     .notNull()
-    .references(() => document.id),
+    .references(() => document.id, { onDelete: "cascade" }),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
@@ -24,7 +24,7 @@ export const document = sqliteTable("document", {
     .references(() => collection.id, { onDelete: "cascade" }),
   createdAt: integer("created_at", { mode: "timestamp_ms" }),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
-  createdBy: text("created_by").references(() => user.id),
+  createdBy: text("created_by").references(() => user.id, {}),
   updatedBy: text("updated_by").references(() => user.id),
   published: integer("published", { mode: "boolean" }).default(false),
 });

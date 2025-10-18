@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
+import { DrizzleQueryError } from "drizzle-orm";
 
 // Create the libSQL client with WAL mode enabled for concurrent access
 const client = createClient({
@@ -40,3 +41,23 @@ export async function closeDatabase() {
     console.error("Error closing database:", error);
   }
 }
+
+export function isDatabaseError(
+  error: unknown,
+): error is DrizzleQueryError & { cause: { code: string } } {
+  return (
+    error instanceof DrizzleQueryError &&
+    typeof error.cause === "object" &&
+    error.cause !== null &&
+    "code" in error.cause
+  );
+}
+
+export const errors = {
+  UNKNOWN_ERROR: {
+    message: "An unknown error occured",
+  },
+  CASCADING_ERROR: {
+    message: "A cascading error occured",
+  },
+};

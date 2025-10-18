@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { db } from "../db";
+import { db, errors, isDatabaseError } from "../db";
 import { desc, eq } from "drizzle-orm";
 import { collection, document } from "@/db/schema";
 import z from "zod";
@@ -49,6 +49,24 @@ export const createCollection = createServerFn({
       })
       .returning();
     return newCollection[0];
+  });
+
+export const deleteCollection = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({ id: z.string().min(1, "Collection Id is required") }),
+  )
+  .handler(async ({ data }) => {
+    try {
+      await db.delete(document).where(eq(document.collectionId, data.id));
+      await db.delete(collection).where(eq(collection.id, data.id));
+    } catch (error) {
+      if (isDatabaseError(error)) {
+        console.log(error);
+        return errors.CASCADING_ERROR;
+      }
+    }
   });
 
 export const getCollectionById = createServerFn({
