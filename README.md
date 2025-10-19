@@ -45,7 +45,7 @@ volumes:
 - [x] **images** this is really important
 - [ ] configuration of app (app title, colors etc)
 - [ ] user management with teams support
-- [ ] permissions
+- [x] permissions
 - [x] settings page for that ^^
 - [ ] spreadsheet support? (you can already create tables in markdown, but what about excel imports?)
 - [ ] export to md/pdf/word etc
