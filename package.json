@@ -50,6 +50,7 @@
     "@tiptap/extension-collaboration-caret": "^3.7.2",
     "@tiptap/extension-file-handler": "^3.7.2",
     "@tiptap/extension-image": "^3.7.2",
+    "@tiptap/extension-mention": "^3.7.2",
     "@tiptap/extension-table": "^3.7.2",
     "@tiptap/extension-table-of-contents": "^3.7.2",
     "@tiptap/extension-typography": "^3.7.2",

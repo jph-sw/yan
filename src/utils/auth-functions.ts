@@ -1,9 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { auth } from "./auth";
+import { auth, User } from "./auth";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import z from "zod";
 import { statementSchema } from "./permissions";
-import { userRequiredMiddleware } from "./auth-middleware";
 
 export const getUserSession = createServerFn({
   method: "GET",
@@ -20,16 +19,6 @@ export const getUserSession = createServerFn({
     user: userSession.user,
     session: userSession.session,
   };
-});
-
-export const getUsers = createServerFn({
-  method: "GET",
-}).handler(async () => {
-  const users = await auth.api.listUsers({
-    query: {},
-    headers: getRequestHeaders(),
-  });
-  return users;
 });
 
 export const validateDiscordUser = createServerFn({

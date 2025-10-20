@@ -1,7 +1,6 @@
-import { mutationOptions, queryOptions } from "@tanstack/react-query";
-import { getUsers, getUserSession } from "../auth-functions";
-import { auth } from "../auth";
-import { User } from "lucide-react";
+import { queryOptions } from "@tanstack/react-query";
+import { getUserSession } from "../auth-functions";
+import { getUsers } from "./documents";
 
 export const useAuthQueries = {
   all: ["auth"],

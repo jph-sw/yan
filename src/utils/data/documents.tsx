@@ -1,10 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import z from "zod";
 import { db, errors, isDatabaseError } from "../db";
-import { document } from "@/db/schema";
+import { document, user } from "@/db/schema";
 import { queryOptions } from "@tanstack/react-query";
 import { and, eq } from "drizzle-orm";
 import { userRequiredMiddleware } from "../auth-middleware";
+import { User } from "../auth";
 
 const documentObject = z.object({
   id: z.uuid().optional(),
@@ -131,6 +132,22 @@ export const getPublishedDocumentById = createServerFn({ method: "GET" })
       .where(and(eq(document.id, data.id), eq(document.published, true)))
       .get();
     return doc;
+  });
+
+export const getUsers = createServerFn({ method: "GET" })
+  .middleware([userRequiredMiddleware])
+  .handler(async () => {
+    const users = await db
+      .select({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+      })
+      .from(user)
+      .all();
+
+    return users as User[];
   });
 
 export const updateDocument = createServerFn({ method: "POST" })

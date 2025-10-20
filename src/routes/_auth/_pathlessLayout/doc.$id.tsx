@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
 
     return {
       user: userSession?.user,
-      users: users.users,
+      users: users,
     };
   },
 });

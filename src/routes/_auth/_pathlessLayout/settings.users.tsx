@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/settings/users")({
   component: RouteComponent,
   loader: async ({ context }) => {
     const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user()
+      useAuthQueries.user(),
     );
 
     const users = await context.queryClient.fetchQuery(useAuthQueries.users());
@@ -71,13 +71,13 @@ function RouteComponent() {
           new Date(info.getValue() as string).toLocaleDateString(),
       },
     ],
-    []
+    [],
   );
 
   const table = useReactTable({
     columns,
-    data: users.users,
-    pageCount: Math.ceil((users?.total || 0) / pagination.pageSize),
+    data: users,
+    pageCount: Math.ceil((users?.length || 0) / pagination.pageSize),
     getRowId: (row: IData) => row.id,
     state: {
       pagination,
@@ -97,7 +97,7 @@ function RouteComponent() {
         <h2 className="text-xl font-semibold mb-4">Users</h2>
         <DataGrid
           table={table}
-          recordCount={users?.total || 0}
+          recordCount={users?.length || 0}
           tableLayout={{ dense: true }}
         >
           <div className="w-full space-y-2.5">
