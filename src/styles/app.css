@@ -212,5 +212,11 @@
       user-select: none;
       white-space: nowrap;
     }
+
+    /* Mention styling */
+    .mention {
+      @apply inline-block rounded-md bg-primary/10 px-2 py-0.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20;
+      cursor: pointer;
+    }
   }
 }

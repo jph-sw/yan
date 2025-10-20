@@ -20,6 +20,8 @@ import {
 import { ToC } from "./table-of-contents";
 import Commands from "./slash-command";
 import slashSuggestion from "./slash-suggestion";
+import Mention from "@tiptap/extension-mention";
+import { createMentionSuggestion } from "./mention-suggestion";
 
 const MemorizedToC = memo(ToC);
 
@@ -37,6 +39,7 @@ function useHocuspocus(documentId: string) {
 export function Editor({
   document,
   user,
+  users,
   isEditMode,
   setIsEditMode,
   editModeChanged,
@@ -44,6 +47,7 @@ export function Editor({
 }: {
   document: Document;
   user: User;
+  users: User[];
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;
   editModeChanged: () => void;
@@ -79,6 +83,24 @@ export function Editor({
         },
       }),
       Image,
+      Mention.configure({
+        HTMLAttributes: {
+          class: "mention",
+        },
+        renderHTML({ node }) {
+          return [
+            "span",
+            {
+              class: "mention",
+              "data-type": "mention",
+              "data-id": node.attrs.id,
+              "data-label": node.attrs.label,
+            },
+            `@${node.attrs.label}`,
+          ];
+        },
+        suggestion: createMentionSuggestion(users),
+      }),
       Commands.configure({
         slashSuggestion,
       }),

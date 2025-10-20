@@ -19,6 +19,8 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
       useAuthQueries.user(),
     );
 
+    const users = await context.queryClient.fetchQuery(useAuthQueries.users());
+
     await context.queryClient.ensureQueryData(
       documentByIdQueryOptions(params.id),
     );
@@ -29,13 +31,14 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
 
     return {
       user: userSession?.user,
+      users: users.users,
     };
   },
 });
 
 function RouteComponent() {
   const params = Route.useParams();
-  const { user } = Route.useLoaderData();
+  const { user, users } = Route.useLoaderData();
 
   const queryClient = useQueryClient();
 
@@ -84,6 +87,7 @@ function RouteComponent() {
             key={document.id}
             document={document}
             user={user!}
+            users={users}
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
             editModeChanged={editModeChanged}
