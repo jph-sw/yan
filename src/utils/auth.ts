@@ -40,7 +40,16 @@ export const auth = betterAuth({
             });
 
             if (isValid) {
-              console.log("can access");
+              let adminIds =
+                process.env.ADMIN_DISCORD_USER_IDS?.split(",") || [];
+              if (adminIds.includes(accountRow.accountId!)) {
+                ctx.context.internalAdapter.updateUser(
+                  ctx.context.newSession.user.id,
+                  {
+                    role: "admin",
+                  },
+                );
+              }
             } else {
               ctx.context.internalAdapter.deleteUser(
                 ctx.context.newSession.user.id,
