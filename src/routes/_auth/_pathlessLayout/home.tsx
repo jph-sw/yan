@@ -13,11 +13,11 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/home")({
       useAuthQueries.user(),
     );
 
-    context.queryClient.ensureQueryData(
+    await context.queryClient.ensureQueryData(
       getDocumentsByUserIdQueryOptions(userSession?.user.id!),
     );
 
-    context.queryClient.ensureQueryData(
+    await context.queryClient.ensureQueryData(
       getFavoritesQuery(userSession?.user.id!),
     );
 

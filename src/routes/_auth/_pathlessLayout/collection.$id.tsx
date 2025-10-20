@@ -31,8 +31,10 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_auth/_pathlessLayout/collection/$id")({
   component: RouteComponent,
   loader: async ({ context, params }) => {
-    context.queryClient.ensureQueryData(getCollectionByIdQuery(params.id));
-    context.queryClient.ensureQueryData(
+    await context.queryClient.ensureQueryData(
+      getCollectionByIdQuery(params.id),
+    );
+    await context.queryClient.ensureQueryData(
       getDocumentsByCollectionIdQueryOptions(params.id),
     );
   },

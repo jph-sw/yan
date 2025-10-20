@@ -10,16 +10,22 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 export const Route = createFileRoute("/_auth/_pathlessLayout")({
   component: RouteComponent,
   loader: async ({ context }) => {
-    const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user(),
-    );
+    try {
+      const userSession = await context.queryClient.fetchQuery(
+        useAuthQueries.user(),
+      );
 
-    context.queryClient.ensureQueryData(collectionsQuery);
-    context.queryClient.ensureQueryData(documentsQueryOptions);
+      await context.queryClient.ensureQueryData(collectionsQuery);
+      await context.queryClient.ensureQueryData(documentsQueryOptions);
 
-    return {
-      user: userSession?.user,
-    };
+      return {
+        user: userSession?.user,
+      };
+    } catch (error) {
+      console.error("Error loading auth layout data:", error);
+      // Re-throw to let TanStack Router handle it
+      throw error;
+    }
   },
 });
 

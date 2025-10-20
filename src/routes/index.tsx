@@ -4,7 +4,9 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context }) => {
-    context.queryClient.ensureQueryData(getPublishedDocumentsQueryOptions);
+    await context.queryClient.ensureQueryData(
+      getPublishedDocumentsQueryOptions,
+    );
   },
 });
 

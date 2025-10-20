@@ -55,12 +55,12 @@ export function isDatabaseError(
 
 export const errors = {
   UNKNOWN_ERROR: {
-    message: "An unknown error occured",
+    message: "An unknown error occurred",
   },
   CASCADING_ERROR: {
-    message: "A cascading error occured",
+    message: "A cascading error occurred",
   },
   UNAUTHORIZED: {
-    message: "Insufficent permissions",
+    message: "Insufficient permissions",
   },
 };

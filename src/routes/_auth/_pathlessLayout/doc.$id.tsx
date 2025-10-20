@@ -19,9 +19,13 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
       useAuthQueries.user(),
     );
 
-    context.queryClient.ensureQueryData(documentByIdQueryOptions(params.id));
-    context.queryClient.ensureQueryData(getCollectionByDocIdQuery(params.id));
-    context.queryClient.ensureQueryData(isFavoriteQuery(params.id));
+    await context.queryClient.ensureQueryData(
+      documentByIdQueryOptions(params.id),
+    );
+    await context.queryClient.ensureQueryData(
+      getCollectionByDocIdQuery(params.id),
+    );
+    await context.queryClient.ensureQueryData(isFavoriteQuery(params.id));
 
     return {
       user: userSession?.user,

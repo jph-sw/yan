@@ -224,7 +224,14 @@ export const getDocumentsByCollectionIdQueryOptions = (collectionId: string) =>
 export const documentsQueryOptions = queryOptions({
   queryKey: ["documents"],
   queryFn: async () => {
-    return await getDocuments();
+    try {
+      return await getDocuments();
+    } catch (error) {
+      if (error instanceof Response && error.status === 401) {
+        return [];
+      }
+      throw error;
+    }
   },
 });
 

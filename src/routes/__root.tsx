@@ -70,15 +70,18 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
   beforeLoad: async ({ context }) => {
     const userSession = await context.queryClient.fetchQuery(
-      useAuthQueries.user()
+      useAuthQueries.user(),
     );
     return {
       userSession,
     };
   },
   loader: async ({ context }) => {
-    context.queryClient.ensureQueryData(collectionsQuery);
-    context.queryClient.ensureQueryData(documentsQueryOptions);
+    // Only fetch collections and documents if user is authenticated
+    if (context.userSession) {
+      await context.queryClient.ensureQueryData(collectionsQuery);
+      await context.queryClient.ensureQueryData(documentsQueryOptions);
+    }
     const theme = await getThemeServerFn();
 
     return { theme };
@@ -94,9 +97,6 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { data: collections } = useSuspenseQuery(collectionsQuery);
-  const { data: documents } = useSuspenseQuery(documentsQueryOptions);
-
   const { theme } = Route.useLoaderData();
 
   return (

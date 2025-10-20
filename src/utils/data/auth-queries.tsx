@@ -8,8 +8,14 @@ export const useAuthQueries = {
   user: () =>
     queryOptions({
       queryKey: [...useAuthQueries.all, "user"],
-      queryFn: () => getUserSession(),
-      // queryFn: () => getUserId(),
+      queryFn: async () => {
+        try {
+          return await getUserSession();
+        } catch (error) {
+          console.error("Error fetching user session:", error);
+          return null;
+        }
+      },
     }),
   users: () =>
     queryOptions({
