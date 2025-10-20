@@ -29,7 +29,7 @@ function useHocuspocus(documentId: string) {
   return useMemo(
     () =>
       new HocuspocusProvider({
-        url: `ws://${import.meta.env.BASE_URL}:1234`,
+        url: import.meta.env.VITE_PUBLIC_WS_URL!,
         name: documentId,
       }),
     [documentId],
