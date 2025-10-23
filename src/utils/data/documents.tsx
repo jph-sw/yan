@@ -143,6 +143,7 @@ export const getUsers = createServerFn({ method: "GET" })
         name: user.name,
         email: user.email,
         image: user.image,
+        role: user.role,
       })
       .from(user)
       .all();
