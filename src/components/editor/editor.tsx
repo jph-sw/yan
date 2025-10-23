@@ -25,11 +25,11 @@ import { createMentionSuggestion } from "./mention-suggestion";
 
 const MemorizedToC = memo(ToC);
 
-function useHocuspocus(documentId: string) {
+function useHocuspocus(documentId: string, url: string) {
   return useMemo(
     () =>
       new HocuspocusProvider({
-        url: import.meta.env.VITE_PUBLIC_WS_URL!,
+        url,
         name: documentId,
       }),
     [documentId],
@@ -44,6 +44,7 @@ export function Editor({
   setIsEditMode,
   editModeChanged,
   setMdContent,
+  wsUrl,
 }: {
   document: Document;
   user: User;
@@ -52,8 +53,9 @@ export function Editor({
   setIsEditMode: (isEditMode: boolean) => void;
   editModeChanged: () => void;
   setMdContent: (content: string) => void;
+  wsUrl: string;
 }) {
-  const provider = useHocuspocus(document.id);
+  const provider = useHocuspocus(document.id, wsUrl);
   const [items, setItems] = useState<TableOfContentData>(
     [] as TableOfContentData,
   );
@@ -62,6 +64,7 @@ export function Editor({
 
   useEffect(() => {
     editModeChangedRef.current = editModeChanged;
+    console.log(wsUrl);
   }, [editModeChanged]);
 
   const editor = useEditor({

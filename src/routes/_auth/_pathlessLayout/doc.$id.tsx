@@ -32,13 +32,14 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
     return {
       user: userSession?.user,
       users: users,
+      wsUrl: process.env.WS_URL,
     };
   },
 });
 
 function RouteComponent() {
   const params = Route.useParams();
-  const { user, users } = Route.useLoaderData();
+  const { user, users, wsUrl } = Route.useLoaderData();
 
   const queryClient = useQueryClient();
 
@@ -92,6 +93,7 @@ function RouteComponent() {
             setIsEditMode={setIsEditMode}
             editModeChanged={editModeChanged}
             setMdContent={setHtmlContent}
+            wsUrl={wsUrl!}
           />
           <div className="col-span-2" />
         </div>
