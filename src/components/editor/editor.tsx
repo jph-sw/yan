@@ -11,7 +11,6 @@ import { Markdown } from "@tiptap/markdown";
 import { getRandomColor } from "@/lib/utils";
 import FileHandler from "@tiptap/extension-file-handler";
 import Image from "@tiptap/extension-image";
-import { Document } from "@/utils/types";
 import {
   getHierarchicalIndexes,
   TableOfContentData,
@@ -25,37 +24,25 @@ import { createMentionSuggestion } from "./mention-suggestion";
 
 const MemorizedToC = memo(ToC);
 
-function useHocuspocus(documentId: string, url: string) {
-  return useMemo(
-    () =>
-      new HocuspocusProvider({
-        url,
-        name: documentId,
-      }),
-    [documentId],
-  );
-}
-
 export function Editor({
-  document,
   user,
   users,
   isEditMode,
   setIsEditMode,
   editModeChanged,
-  setMdContent,
+  setHtmlContent,
   wsUrl,
+  provider,
 }: {
-  document: Document;
   user: User;
   users: User[];
   isEditMode: boolean;
   setIsEditMode: (isEditMode: boolean) => void;
   editModeChanged: () => void;
-  setMdContent: (content: string) => void;
+  setHtmlContent: (content: string) => void;
   wsUrl: string;
+  provider: HocuspocusProvider;
 }) {
-  const provider = useHocuspocus(document.id, wsUrl);
   const [items, setItems] = useState<TableOfContentData>(
     [] as TableOfContentData,
   );
@@ -71,7 +58,7 @@ export function Editor({
     editable: false,
     onUpdate(props) {
       setIsEditMode(props.editor.isEditable);
-      setMdContent(editor?.getHTML() || "");
+      setHtmlContent(editor?.getHTML() || "");
     },
     immediatelyRender: false,
     extensions: [

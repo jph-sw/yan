@@ -1,4 +1,4 @@
-import { Editor } from "@/components/editor/editor";
+import { CollaborativeEditor } from "@/components/editor/editor-collaborative";
 import { Header } from "@/components/editor/header";
 import { NotFound } from "@/components/NotFound";
 import { useAuthQueries } from "@/utils/data/auth-queries";
@@ -84,7 +84,7 @@ function RouteComponent() {
             </div>
             <div className="col-span-2" />
           </div>
-          <Editor
+          <CollaborativeEditor
             key={document.id}
             document={document}
             user={user!}
@@ -92,7 +92,7 @@ function RouteComponent() {
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
             editModeChanged={editModeChanged}
-            setMdContent={setHtmlContent}
+            setHtmlContent={setHtmlContent}
             wsUrl={wsUrl!}
           />
           <div className="col-span-2" />
