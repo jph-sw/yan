@@ -46,9 +46,9 @@ export function CollaborativeEditor({
   setIsEditMode: (isEditMode: boolean) => void;
   editModeChanged: () => void;
   setHtmlContent: (content: string) => void;
-  wsUrl: string;
+  wsUrl: string | undefined;
 }) {
-  const provider = useProvider(document.id, wsUrl);
+  const provider = useProvider(document.id, wsUrl || "");
 
   useEffect(() => {
     provider.attach();
@@ -56,17 +56,21 @@ export function CollaborativeEditor({
 
   return (
     <div>
-      <Editor
-        key={document.id}
-        user={user!}
-        users={users}
-        isEditMode={isEditMode}
-        setIsEditMode={setIsEditMode}
-        editModeChanged={editModeChanged}
-        setHtmlContent={setHtmlContent}
-        wsUrl={wsUrl!}
-        provider={provider}
-      />
+      {wsUrl ? (
+        <Editor
+          key={document.id}
+          user={user!}
+          users={users}
+          isEditMode={isEditMode}
+          setIsEditMode={setIsEditMode}
+          editModeChanged={editModeChanged}
+          setHtmlContent={setHtmlContent}
+          wsUrl={wsUrl!}
+          provider={provider}
+        />
+      ) : (
+        <div>No WebSocket URL provided</div>
+      )}
     </div>
   );
 }

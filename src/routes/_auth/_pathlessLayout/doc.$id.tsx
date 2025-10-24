@@ -7,6 +7,7 @@ import {
   documentByIdQueryOptions,
   updateDocument,
 } from "@/utils/data/documents";
+import { getWsUrl } from "@/utils/data/env";
 import { isFavoriteQuery } from "@/utils/data/favorites";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -29,10 +30,12 @@ export const Route = createFileRoute("/_auth/_pathlessLayout/doc/$id")({
     );
     await context.queryClient.ensureQueryData(isFavoriteQuery(params.id));
 
+    const wsUrl = await getWsUrl();
+
     return {
       user: userSession?.user,
       users: users,
-      wsUrl: process.env.WS_URL,
+      wsUrl: wsUrl,
     };
   },
 });
@@ -93,7 +96,7 @@ function RouteComponent() {
             setIsEditMode={setIsEditMode}
             editModeChanged={editModeChanged}
             setHtmlContent={setHtmlContent}
-            wsUrl={wsUrl!}
+            wsUrl={wsUrl}
           />
           <div className="col-span-2" />
         </div>
