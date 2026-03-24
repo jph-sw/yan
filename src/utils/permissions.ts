@@ -1,31 +1,31 @@
 import { createAccessControl } from "better-auth/plugins/access";
 import {
-  defaultStatements,
-  adminAc,
-  userAc,
+	adminAc,
+	defaultStatements,
+	userAc,
 } from "better-auth/plugins/admin/access";
 import z from "zod";
 
 const statement = {
-  ...defaultStatements,
+	...defaultStatements,
 
-  collection: ["create", "delete"],
+	collection: ["create", "delete"],
 } as const;
 
 export const statementSchema = z
-  .object({
-    collection: z.array(z.enum(["create", "delete"])).optional(),
-  })
-  .catchall(z.array(z.string()).optional())
-  .partial();
+	.object({
+		collection: z.array(z.enum(["create", "delete"])).optional(),
+	})
+	.catchall(z.array(z.string()).optional())
+	.partial();
 
 export const ac = createAccessControl(statement);
 
 export const user = ac.newRole({
-  collection: ["create"],
-  ...userAc.statements,
+	collection: ["create"],
+	...userAc.statements,
 });
 export const admin = ac.newRole({
-  collection: ["create", "delete"],
-  ...adminAc.statements,
+	collection: ["create", "delete"],
+	...adminAc.statements,
 });

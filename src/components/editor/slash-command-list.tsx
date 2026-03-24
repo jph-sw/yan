@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 interface Item {
 	title: string;
 	icon: React.ComponentType<{ className?: string }>;
+	// biome-ignore lint/suspicious/noExplicitAny: <>
 	[key: string]: any;
 }
 
@@ -21,6 +22,7 @@ const SlashCommandList = forwardRef<SlashCommandListRef, SlashCommandListProps>(
 	({ items, command }, ref) => {
 		const [selectedIndex, setSelectedIndex] = useState(0);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: <>
 		useEffect(() => {
 			setSelectedIndex(0);
 		}, [items]);
