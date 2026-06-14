@@ -11,9 +11,6 @@ import {
 } from "@tanstack/react-table";
 import type { User } from "better-auth";
 import { useMemo, useState } from "react";
-import { DataGrid, DataGridContainer } from "@/components/ui/data-grid";
-import { DataGridPagination } from "@/components/ui/data-grid-pagination";
-import { DataGridTable } from "@/components/ui/data-grid-table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useAuthQueries } from "@/utils/data/auth-queries";
 
@@ -95,7 +92,7 @@ function RouteComponent() {
 		<div>
 			<div>
 				<h2 className="text-xl font-semibold mb-4">Users</h2>
-				<DataGrid
+				{/*<DataGrid
 					table={table}
 					recordCount={users?.length || 0}
 					tableLayout={{ dense: true }}
@@ -109,7 +106,7 @@ function RouteComponent() {
 						</DataGridContainer>
 						<DataGridPagination />
 					</div>
-				</DataGrid>
+				</DataGrid>*/}
 			</div>
 		</div>
 	);
