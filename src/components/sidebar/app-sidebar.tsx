@@ -37,10 +37,9 @@ export function AppSidebar({
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/home">
-                    <HomeIcon /> Home
-                  </Link>
+                <SidebarMenuButton render={  <Link className="w-full" to="/home">
+                  <HomeIcon /> Home
+                </Link>}>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <NavSearch collections={collections} documents={documents} />

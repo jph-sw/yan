@@ -63,18 +63,22 @@ function RouteComponent() {
 					</div>
 					<AlertDialog>
 						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant={"outline"} size={"icon"}>
+              <DropdownMenuTrigger render={
+              		<Button variant={"outline"} size={"icon"}>
 									<EllipsisVerticalIcon />
 								</Button>
+							}>
+
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="start" className="w-56">
 								<DropdownMenuLabel>Manage collection</DropdownMenuLabel>
 								<DropdownMenuGroup>
-									<AlertDialogTrigger asChild>
-										<DropdownMenuItem variant={"destructive"}>
+                  <AlertDialogTrigger render={
+                  		<DropdownMenuItem variant={"destructive"}>
 											Delete collection
 										</DropdownMenuItem>
+									}>
+
 									</AlertDialogTrigger>
 								</DropdownMenuGroup>
 							</DropdownMenuContent>
@@ -89,8 +93,8 @@ function RouteComponent() {
 							</AlertDialogHeader>
 							<AlertDialogFooter>
 								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction asChild>
-									<Button
+                <AlertDialogAction render={
+            						<Button
 										variant={"destructive"}
 										onClick={async () => {
 											const res = await deleteCollection({
@@ -114,6 +118,8 @@ function RouteComponent() {
 									>
 										Continue
 									</Button>
+								}>
+
 								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>

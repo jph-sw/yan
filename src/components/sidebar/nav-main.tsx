@@ -101,20 +101,13 @@ export function NavMain({
         {collections.map((collection) => (
           <Collapsible
             key={collection.id}
-            asChild
-            open={openStates[collection.id] ?? false}
-            onOpenChange={(open) => {
-              setOpenStates((prev) => ({
-                ...prev,
-                [collection.id]: open,
-              }));
-            }}
-          >
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={collection.name}>
+            render={    <SidebarMenuItem>
+              <SidebarMenuButton render={
                 <Link to="/collection/$id" params={{ id: collection.id }}>
                   <span>{collection.name}</span>
                 </Link>
+              } tooltip={collection.name}>
+
               </SidebarMenuButton>
               <div className="absolute top-1.5 right-8 flex items-center">
                 <button
@@ -144,11 +137,13 @@ export function NavMain({
                   )}
                 </button>
               </div>
-              <CollapsibleTrigger asChild>
+              <CollapsibleTrigger render={
                 <SidebarMenuAction className="data-[state=open]:rotate-90">
                   <ChevronRight />
                   <span className="sr-only">Toggle</span>
                 </SidebarMenuAction>
+              }>
+
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
@@ -168,8 +163,10 @@ export function NavMain({
                           });
                         }}
                       >
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton render={
                           <Input autoFocus name="title" />
+
+                        }>
                         </SidebarMenuSubButton>
                       </form>
                     </SidebarMenuSubItem>
@@ -178,16 +175,27 @@ export function NavMain({
                     .filter((doc) => doc.collectionId === collection.id)
                     .map((doc) => (
                       <SidebarMenuSubItem key={doc.id}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton render={
                           <Link to="/doc/$id" params={{ id: doc.id }}>
                             <span>{doc.title}</span>
                           </Link>
+                        }>
+
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
                 </SidebarMenuSub>
               </CollapsibleContent>
-            </SidebarMenuItem>
+            </SidebarMenuItem>}
+            open={openStates[collection.id] ?? false}
+            onOpenChange={(open) => {
+              setOpenStates((prev) => ({
+                ...prev,
+                [collection.id]: open,
+              }));
+            }}
+          >
+
           </Collapsible>
         ))}
         <Dialog
@@ -196,13 +204,15 @@ export function NavMain({
             setIsCreatingNewCollection(!isCreatingNewCollection)
           }
         >
-          <DialogTrigger asChild>
+          <DialogTrigger render={
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <PlusIcon />
                 <span>New collection</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
+          }>
+
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

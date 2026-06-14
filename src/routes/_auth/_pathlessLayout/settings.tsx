@@ -37,11 +37,13 @@ function RouteComponent() {
 					{items.map((item) => {
 						const Icon = item.icon;
 						return (
-							<SidebarMenuButton asChild key={item.name}>
-								<Link to={item.to}>
+              <SidebarMenuButton render={
+               	<Link to={item.to}>
 									<Icon />
 									{item.name}
 								</Link>
+							} key={item.name}>
+
 							</SidebarMenuButton>
 						);
 					})}

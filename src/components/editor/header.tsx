@@ -73,13 +73,15 @@ export function Header({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
+            <BreadcrumbLink render={
               <Link to="/home">Home</Link>
+
+            }>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
+            <BreadcrumbLink render={
               <Link
                 to="/collection/$id"
                 params={{ id: collection.id }}
@@ -88,6 +90,8 @@ export function Header({
                 <NotebookTextIcon className="h-4 w-4" />
                 {collection.name}
               </Link>
+            }>
+
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -118,10 +122,12 @@ export function Header({
           </Button>
         )}
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger render={
             <Button size={"sm"} variant={"outline"}>
               <EllipsisVerticalIcon />
             </Button>
+          }>
+
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-50">
             <DropdownMenuLabel>Document</DropdownMenuLabel>
