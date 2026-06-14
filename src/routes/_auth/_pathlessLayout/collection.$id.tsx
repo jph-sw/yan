@@ -63,19 +63,23 @@ function RouteComponent() {
 					</div>
 					<AlertDialog>
 						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant={"outline"} size={"icon"}>
-									<EllipsisVerticalIcon />
-								</Button>
-							</DropdownMenuTrigger>
+							<DropdownMenuTrigger
+								render={
+									<Button variant={"outline"} size={"icon"}>
+										<EllipsisVerticalIcon />
+									</Button>
+								}
+							></DropdownMenuTrigger>
 							<DropdownMenuContent align="start" className="w-56">
 								<DropdownMenuLabel>Manage collection</DropdownMenuLabel>
 								<DropdownMenuGroup>
-									<AlertDialogTrigger asChild>
-										<DropdownMenuItem variant={"destructive"}>
-											Delete collection
-										</DropdownMenuItem>
-									</AlertDialogTrigger>
+									<AlertDialogTrigger
+										render={
+											<DropdownMenuItem variant={"destructive"}>
+												Delete collection
+											</DropdownMenuItem>
+										}
+									></AlertDialogTrigger>
 								</DropdownMenuGroup>
 							</DropdownMenuContent>
 						</DropdownMenu>
@@ -89,32 +93,34 @@ function RouteComponent() {
 							</AlertDialogHeader>
 							<AlertDialogFooter>
 								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction asChild>
-									<Button
-										variant={"destructive"}
-										onClick={async () => {
-											const res = await deleteCollection({
-												data: { id: collection.id },
-											});
-											if (res?.message) {
-												toast.error(res.message);
-											} else {
-												queryClient.invalidateQueries({
-													queryKey: ["collections"],
+								<AlertDialogAction
+									render={
+										<Button
+											variant={"destructive"}
+											onClick={async () => {
+												const res = await deleteCollection({
+													data: { id: collection.id },
 												});
-												queryClient.invalidateQueries({
-													queryKey: ["documents"],
-												});
-												queryClient.invalidateQueries({
-													queryKey: ["favorites"],
-												});
-												navigate({ to: "/home" });
-											}
-										}}
-									>
-										Continue
-									</Button>
-								</AlertDialogAction>
+												if (res?.message) {
+													toast.error(res.message);
+												} else {
+													queryClient.invalidateQueries({
+														queryKey: ["collections"],
+													});
+													queryClient.invalidateQueries({
+														queryKey: ["documents"],
+													});
+													queryClient.invalidateQueries({
+														queryKey: ["favorites"],
+													});
+													navigate({ to: "/home" });
+												}
+											}}
+										>
+											Continue
+										</Button>
+									}
+								></AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>

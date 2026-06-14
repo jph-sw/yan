@@ -9,65 +9,65 @@ import { CircleQuestionMarkIcon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function EditProfileForm({ user }: { user: User }) {
-  const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-  const form = useAppForm({
-    defaultValues: user,
-    onSubmit: async (values) => {
-      await authClient.updateUser({
-        name: values.value.name,
-        image: values.value.image,
-      });
+	const form = useAppForm({
+		defaultValues: user,
+		onSubmit: async (values) => {
+			await authClient.updateUser({
+				name: values.value.name,
+				image: values.value.image,
+			});
 
-      queryClient.invalidateQueries({ queryKey: ["auth", "user"] });
-    },
-  });
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-    >
-      <form.AppField
-        name="image"
-        children={(field) => <field.ImageField label="Profile Image" />}
-      />
-      <div className="grid grid-cols-2 gap-4">
-        <form.AppField
-          name="name"
-          children={(field) => <field.TextField label="Name" />}
-        />
-        <Label className="flex flex-col items-start">
-          <span className="flex items-center">
-            Email
-            <Tooltip>
-              <TooltipTrigger>
-                <CircleQuestionMarkIcon className="h-3 w-3 ms-1" />
-              </TooltipTrigger>
-              <TooltipContent>
-                Email cannot be changed at this time.
-              </TooltipContent>
-            </Tooltip>
-          </span>
-          <Input
-            disabled
-            type="text"
-            defaultValue={user.email}
-            className="mt-1"
-          />
-        </Label>
-      </div>
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-        children={([canSubmit, isSubmitting]) => (
-          <>
-            <Button className="mt-4" type="submit" disabled={!canSubmit}>
-              {isSubmitting ? "..." : "Update Profile"}
-            </Button>
-          </>
-        )}
-      />
-    </form>
-  );
+			queryClient.invalidateQueries({ queryKey: ["auth", "user"] });
+		},
+	});
+	return (
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				form.handleSubmit();
+			}}
+		>
+			<form.AppField
+				name="image"
+				children={(field) => <field.ImageField label="Profile Image" />}
+			/>
+			<div className="grid grid-cols-2 gap-4">
+				<form.AppField
+					name="name"
+					children={(field) => <field.TextField label="Name" />}
+				/>
+				<Label className="flex flex-col items-start">
+					<span className="flex items-center">
+						Email
+						<Tooltip>
+							<TooltipTrigger>
+								<CircleQuestionMarkIcon className="h-3 w-3 ms-1" />
+							</TooltipTrigger>
+							<TooltipContent>
+								Email cannot be changed at this time.
+							</TooltipContent>
+						</Tooltip>
+					</span>
+					<Input
+						disabled
+						type="text"
+						defaultValue={user.email}
+						className="mt-1"
+					/>
+				</Label>
+			</div>
+			<form.Subscribe
+				selector={(state) => [state.canSubmit, state.isSubmitting]}
+				children={([canSubmit, isSubmitting]) => (
+					<>
+						<Button className="mt-4" type="submit" disabled={!canSubmit}>
+							{isSubmitting ? "..." : "Update Profile"}
+						</Button>
+					</>
+				)}
+			/>
+		</form>
+	);
 }

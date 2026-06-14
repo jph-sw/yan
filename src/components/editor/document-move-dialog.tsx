@@ -25,7 +25,7 @@ export function DocumentMoveDialog({
 }) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogTrigger asChild>{children}</DialogTrigger>
+			<DialogTrigger render={children}></DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Move document</DialogTitle>
