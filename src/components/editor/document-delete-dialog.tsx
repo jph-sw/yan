@@ -34,9 +34,7 @@ export function DocumentDeleteDialog({
 
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogTrigger render={
-        children
-			}></AlertDialogTrigger>
+			<AlertDialogTrigger render={children}></AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
