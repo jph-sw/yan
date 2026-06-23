@@ -112,7 +112,8 @@ export function NavMain({
 									tooltip={collection.name}
 								></SidebarMenuButton>
 								<div className="absolute top-1.5 right-8 flex items-center">
-									<button
+                  <button
+                    type="button"
 										onClick={() => {
 											if (isCreatingNewDocument[collection.id]) {
 												setIsCreatingNewDocument((prev) => ({
