@@ -76,32 +76,34 @@ export function NavUser({ user }: { user: User }) {
 						align="end"
 						sideOffset={4}
 					>
-						<DropdownMenuLabel className="p-0 font-normal">
-							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-								<Avatar className="h-8 w-8 rounded-lg">
-									<AvatarImage src={user.image || ""} alt={user.name} />
-									<AvatarFallback className="rounded-lg">CN</AvatarFallback>
-								</Avatar>
-								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">{user.name}</span>
-									<span className="truncate text-xs">{user.email}</span>
+						<DropdownMenuGroup>
+							<DropdownMenuLabel className="p-0 font-normal">
+								<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+									<Avatar className="h-8 w-8 rounded-lg">
+										<AvatarImage src={user.image || ""} alt={user.name} />
+										<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+									</Avatar>
+									<div className="grid flex-1 text-left text-sm leading-tight">
+										<span className="truncate font-medium">{user.name}</span>
+										<span className="truncate text-xs">{user.email}</span>
+									</div>
 								</div>
-							</div>
-						</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem onClick={toggleTheme}>
-							{theme === "light" ? <Sun /> : <Moon />}
-							{theme === "light" ? "Light Mode" : "Dark Mode"}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => {
-								authClient.signOut();
-								navigate({ to: "/login" });
-							}}
-						>
-							<LogOut />
-							Log out
-						</DropdownMenuItem>
+							</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={toggleTheme}>
+								{theme === "light" ? <Sun /> : <Moon />}
+								{theme === "light" ? "Light Mode" : "Dark Mode"}
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									authClient.signOut();
+									navigate({ to: "/login" });
+								}}
+							>
+								<LogOut />
+								Log out
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</SidebarMenuItem>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import Fuse from "fuse.js";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -133,7 +133,7 @@ export function NavSearch({
 				</SidebarMenuButton>
 			</SidebarMenuItem>
 			<CommandDialog open={open} onOpenChange={setOpen}>
-				<Command className="rounded-lg border shadow-md md:min-w-[450px]">
+				<Command className="rounded-lg border shadow-md">
 					<CommandInput
 						ref={inputRef}
 						placeholder="Search documents and collections..."
@@ -157,7 +157,6 @@ export function NavSearch({
 													? "py-1 bg-accent text-accent-foreground"
 													: "py-1"
 											}
-											asChild
 											style={{ paddingBlock: "0.4rem" }}
 											onMouseEnter={() => setActiveIndex(globalIdx)}
 											onSelect={() => {
@@ -165,9 +164,7 @@ export function NavSearch({
 												setOpen(false);
 											}}
 										>
-											<Link to={"/doc/$id"} params={{ id: doc.id }}>
-												{doc.title}
-											</Link>
+											{doc.title}
 										</CommandItem>
 									);
 								})}
@@ -185,7 +182,6 @@ export function NavSearch({
 													? "py-1 bg-accent text-accent-foreground"
 													: "py-1"
 											}
-											asChild
 											style={{ paddingBlock: "0.4rem" }}
 											onMouseEnter={() => setActiveIndex(globalIdx)}
 											onSelect={() => {
@@ -196,9 +192,7 @@ export function NavSearch({
 												setOpen(false);
 											}}
 										>
-											<Link to={"/collection/$id"} params={{ id: col.id }}>
-												{col.name}
-											</Link>
+											{col.name}
 										</CommandItem>
 									);
 								})}
