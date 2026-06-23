@@ -1,13 +1,13 @@
-import { collectionsQuery } from "@/utils/data/collections";
-import { useAppForm } from "@/utils/form";
-import { Collection, Document } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { SidebarMenuButton } from "../ui/sidebar";
-import { Button } from "../ui/button";
+import { collectionsQuery } from "@/utils/data/collections";
 import { updateDocument } from "@/utils/data/documents";
+import { useAppForm } from "@/utils/form";
+import type { Collection, Document } from "@/utils/types";
+import { Button } from "../ui/button";
+import { SidebarMenuButton } from "../ui/sidebar";
+import { Skeleton } from "../ui/skeleton";
 
 export function MoveDocumentForm({
 	document,

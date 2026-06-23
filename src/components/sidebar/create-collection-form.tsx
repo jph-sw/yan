@@ -1,8 +1,8 @@
-import { useAppForm } from "@/utils/form";
-import z from "zod";
-import { Button } from "../ui/button";
-import { createCollection } from "@/utils/data/collections";
 import { useQueryClient } from "@tanstack/react-query";
+import z from "zod";
+import { createCollection } from "@/utils/data/collections";
+import { useAppForm } from "@/utils/form";
+import { Button } from "../ui/button";
 
 export function CreateCollectionForm({
 	closeDialog,

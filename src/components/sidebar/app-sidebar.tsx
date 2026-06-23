@@ -1,5 +1,8 @@
+import { Link } from "@tanstack/react-router";
+import type { User } from "better-auth";
 import { DownloadCloud, HomeIcon, LucideIcon, LucideProps } from "lucide-react";
-
+import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import React from "react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,14 +14,10 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import type { Collection, Document } from "@/utils/types";
 import { NavMain } from "./nav-main";
-import { User } from "better-auth";
-import { NavUser } from "./nav-user";
-import React from "react";
-import { DynamicIcon, IconName } from "lucide-react/dynamic";
-import { Collection, Document } from "@/utils/types";
 import { NavSearch } from "./nav-search";
+import { NavUser } from "./nav-user";
 
 export function AppSidebar({
 	collections,

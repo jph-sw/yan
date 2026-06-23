@@ -1,3 +1,5 @@
+import { Link, redirect, useNavigate } from "@tanstack/react-router";
+import type { User } from "better-auth";
 import {
 	BadgeCheck,
 	Bell,
@@ -9,7 +11,6 @@ import {
 	Sparkles,
 	Sun,
 } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -26,10 +27,8 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { User } from "better-auth";
-import { authClient } from "@/utils/auth-client";
-import { Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useTheme } from "@/hooks/use-theme";
+import { authClient } from "@/utils/auth-client";
 
 export function NavUser({ user }: { user: User }) {
 	const { isMobile } = useSidebar();

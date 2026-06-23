@@ -1,11 +1,4 @@
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
 	ArrowRightSquareIcon,
@@ -16,8 +9,15 @@ import {
 	StarIcon,
 	UploadIcon,
 } from "lucide-react";
-import { Button } from "../ui/button";
-import { Collection, Document } from "@/utils/types";
+import { useState } from "react";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -29,9 +29,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { publishDocument } from "@/utils/data/documents";
-import { useQueryClient } from "@tanstack/react-query";
 import { toggleFavoriteDocument } from "@/utils/data/favorites";
-import { useState } from "react";
+import type { Collection, Document } from "@/utils/types";
+import { Button } from "../ui/button";
 import { DocumentDeleteDialog } from "./document-delete-dialog";
 import { DocumentMoveDialog } from "./document-move-dialog";
 

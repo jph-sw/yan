@@ -1,11 +1,11 @@
-import { Document } from "@/utils/types";
-import { Editor } from "./editor";
-import { User } from "@/utils/auth";
-import { useEffect, useMemo } from "react";
 import {
 	HocuspocusProvider,
 	HocuspocusProviderWebsocket,
 } from "@hocuspocus/provider";
+import { useEffect, useMemo } from "react";
+import type { User } from "@/utils/auth";
+import type { Document } from "@/utils/types";
+import { Editor } from "./editor";
 
 function useWebsocket(url: string) {
 	return useMemo(

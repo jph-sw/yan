@@ -1,4 +1,4 @@
-import { Extension, Editor, Range } from "@tiptap/core";
+import { type Editor, Extension, type Range } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import slashSuggestion from "./slash-suggestion";
 

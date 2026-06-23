@@ -1,6 +1,7 @@
-import { Collection, Document } from "@/utils/types";
-import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { Link, useNavigate } from "@tanstack/react-router";
+import Fuse from "fuse.js";
 import { SearchIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
 	Command,
 	CommandDialog,
@@ -10,10 +11,9 @@ import {
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useRef, useMemo } from "react";
-import Fuse from "fuse.js";
+import type { Collection, Document } from "@/utils/types";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 
 export function NavSearch({
 	collections,

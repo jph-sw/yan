@@ -1,12 +1,12 @@
-import { useAppForm } from "@/utils/form";
-import { User } from "better-auth";
-import { Button } from "../ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import type { User } from "better-auth";
+import { CircleQuestionMarkIcon } from "lucide-react";
 import { authClient } from "@/utils/auth-client";
+import { useAppForm } from "@/utils/form";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { CircleQuestionMarkIcon } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
 
 export function EditProfileForm({ user }: { user: User }) {
 	const queryClient = useQueryClient();

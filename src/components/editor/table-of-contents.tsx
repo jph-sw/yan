@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
 import { TextSelection } from "@tiptap/pm/state";
-import { Editor } from "@tiptap/react";
+import type { Editor } from "@tiptap/react";
+import { cn } from "@/lib/utils";
 
 interface ToCItemData {
 	id: string;

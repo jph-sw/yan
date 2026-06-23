@@ -1,9 +1,24 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import type { User } from "better-auth";
+import { ChevronRight, MinusIcon, PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createDocument } from "@/utils/data/documents";
+import type { Collection, Document } from "@/utils/types";
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "../ui/collapsible";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "../ui/dialog";
+import { Input } from "../ui/input";
 import {
 	SidebarGroup,
 	SidebarGroupLabel,
@@ -15,22 +30,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { ChevronRight, MinusIcon, PlusIcon } from "lucide-react";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "../ui/dialog";
 import { CreateCollectionForm } from "./create-collection-form";
-import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDocument } from "@/utils/data/documents";
-import { User } from "better-auth";
-import { Collection, Document } from "@/utils/types";
 
 const STORAGE_KEY = "doitwrite-collection-states";
 
@@ -112,8 +112,8 @@ export function NavMain({
 									tooltip={collection.name}
 								></SidebarMenuButton>
 								<div className="absolute top-1.5 right-8 flex items-center">
-                  <button
-                    type="button"
+									<button
+										type="button"
 										onClick={() => {
 											if (isCreatingNewDocument[collection.id]) {
 												setIsCreatingNewDocument((prev) => ({
