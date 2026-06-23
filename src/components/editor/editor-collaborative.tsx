@@ -2,32 +2,10 @@ import {
 	HocuspocusProvider,
 	HocuspocusProviderWebsocket,
 } from "@hocuspocus/provider";
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import type { User } from "@/utils/auth";
 import type { Document } from "@/utils/types";
 import { Editor } from "./editor";
-
-function useWebsocket(url: string) {
-	return useMemo(
-		() =>
-			new HocuspocusProviderWebsocket({
-				url,
-			}),
-		[url],
-	);
-}
-
-function useProvider(documentId: string, wsUrl: string) {
-	const wsProvider = useWebsocket(wsUrl);
-	return useMemo(
-		() =>
-			new HocuspocusProvider({
-				websocketProvider: wsProvider,
-				name: documentId,
-			}),
-		[documentId, wsProvider],
-	);
-}
 
 export function CollaborativeEditor({
 	document,
@@ -48,29 +26,50 @@ export function CollaborativeEditor({
 	setHtmlContent: (content: string) => void;
 	wsUrl: string | undefined;
 }) {
-	const provider = useProvider(document.id, wsUrl || "");
+	const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
+	const [synced, setSynced] = useState(false);
 
 	useEffect(() => {
-		provider.attach();
-	}, [provider]);
+		if (!wsUrl) return;
+
+		setSynced(false);
+		setProvider(null);
+
+		const socket = new HocuspocusProviderWebsocket({ url: wsUrl });
+		const hocuspocusProvider = new HocuspocusProvider({
+			websocketProvider: socket,
+			name: document.id,
+			onSynced: () => setSynced(true),
+		});
+		hocuspocusProvider.attach();
+		setProvider(hocuspocusProvider);
+
+		return () => {
+			hocuspocusProvider.destroy();
+			socket.destroy();
+		};
+	}, [document.id, wsUrl]);
+
+	if (!wsUrl) {
+		return <div>No WebSocket URL provided</div>;
+	}
+
+	if (!provider || !synced) {
+		return (
+			<div className="text-muted-foreground p-4 text-sm">Loading document…</div>
+		);
+	}
 
 	return (
-		<div>
-			{wsUrl ? (
-				<Editor
-					key={document.id}
-					user={user!}
-					users={users}
-					isEditMode={isEditMode}
-					setIsEditMode={setIsEditMode}
-					editModeChanged={editModeChanged}
-					setHtmlContent={setHtmlContent}
-					wsUrl={wsUrl!}
-					provider={provider}
-				/>
-			) : (
-				<div>No WebSocket URL provided</div>
-			)}
-		</div>
+		<Editor
+			key={document.id}
+			user={user}
+			users={users}
+			isEditMode={isEditMode}
+			setIsEditMode={setIsEditMode}
+			editModeChanged={editModeChanged}
+			setHtmlContent={setHtmlContent}
+			provider={provider}
+		/>
 	);
 }

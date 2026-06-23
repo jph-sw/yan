@@ -31,7 +31,6 @@ export function Editor({
 	setIsEditMode,
 	editModeChanged,
 	setHtmlContent,
-	wsUrl,
 	provider,
 }: {
 	user: User;
@@ -40,7 +39,6 @@ export function Editor({
 	setIsEditMode: (isEditMode: boolean) => void;
 	editModeChanged: () => void;
 	setHtmlContent: (content: string) => void;
-	wsUrl: string;
 	provider: HocuspocusProvider;
 }) {
 	const [items, setItems] = useState<TableOfContentData>(
@@ -51,8 +49,7 @@ export function Editor({
 
 	useEffect(() => {
 		editModeChangedRef.current = editModeChanged;
-		console.log(wsUrl);
-	}, [editModeChanged, wsUrl]);
+	}, [editModeChanged]);
 
 	const editor = useEditor({
 		editable: false,
